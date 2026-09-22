@@ -1,3 +1,4 @@
+import { LogOut } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 function Header() {
@@ -56,7 +57,20 @@ function Header() {
 				</NavLink>
 			</nav>
 
-			<img src="/uba.png" alt="UBA Logo" width={100} height={100} />
+			<div className="flex relative items-center">
+				<img src="/uba.png" alt="UBA Logo" width={100} height={100} />
+				<LogOut
+					size={20}
+					className="absolute -right-20 cursor-pointer"
+					onClick={() => {
+						const token = localStorage.getItem('token');
+						if (token) {
+							localStorage.removeItem('token');
+							alert('Logout Successful');
+						}
+					}}
+				/>
+			</div>
 		</div>
 	);
 }

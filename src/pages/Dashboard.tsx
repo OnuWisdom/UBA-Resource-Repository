@@ -1,3 +1,4 @@
+import BrowseByDept from '../components/BrowseByDept';
 import Far from '../components/Far';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -8,6 +9,7 @@ function Dashboard() {
 		<>
 			<Header />
 			<Hero />
+			<BrowseByDept />
 			<Far />
 			<Footer />
 		</>

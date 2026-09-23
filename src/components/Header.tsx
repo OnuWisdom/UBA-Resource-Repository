@@ -67,7 +67,7 @@ function Header() {
 					onClick={() => {
 						const token = localStorage.getItem('token');
 						if (token) {
-							localStorage.removeItem('token');
+							sessionStorage.removeItem('token');
 							alert('Logout Successful');
 							navigate('/login', { replace: true });
 						}

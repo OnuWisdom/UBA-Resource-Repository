@@ -33,7 +33,7 @@ export default function Login() {
 				password: loginData.password,
 			});
 			console.log(data);
-			localStorage.setItem('pending_token', data.pending_token);
+			sessionStorage.setItem('pending_token', data.pending_token);
 
 			setStep('token');
 		} catch (error) {
@@ -49,7 +49,7 @@ export default function Login() {
 		setError(null);
 
 		try {
-			const tokenData = localStorage.getItem('pending_token');
+			const tokenData = sessionStorage.getItem('pending_token');
 			if (!tokenData) {
 				throw new Error('No token found. Please log in again.');
 			}
@@ -59,8 +59,8 @@ export default function Login() {
 			});
 
 			navigate('/', { replace: true });
-			localStorage.setItem('token', data.token);
-			localStorage.removeItem('pending_token');
+			sessionStorage.setItem('token', data.token);
+			sessionStorage.removeItem('pending_token');
 			console.log('pending-token', data);
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'Something Happened');

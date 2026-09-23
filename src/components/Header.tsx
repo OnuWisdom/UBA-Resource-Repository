@@ -15,6 +15,7 @@ function Header() {
 				>
 					Home
 				</NavLink>
+
 				<NavLink
 					to="/resources"
 					className={({ isActive }) =>

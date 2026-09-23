@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { loginService, tokenService } from '../services/loginService';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 	const [loginData, setLoginData] = useState({
@@ -10,6 +11,8 @@ export default function Login() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [step, setStep] = useState<'login' | 'token'>('login');
+
+	const navigate = useNavigate();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -30,7 +33,7 @@ export default function Login() {
 				password: loginData.password,
 			});
 			console.log(data);
-			localStorage.setItem('token', data.pending_token);
+			localStorage.setItem('pending_token', data.pending_token);
 
 			setStep('token');
 		} catch (error) {
@@ -46,7 +49,7 @@ export default function Login() {
 		setError(null);
 
 		try {
-			const tokenData = localStorage.getItem('token');
+			const tokenData = localStorage.getItem('pending_token');
 			if (!tokenData) {
 				throw new Error('No token found. Please log in again.');
 			}
@@ -55,7 +58,10 @@ export default function Login() {
 				otp,
 			});
 
-			console.log(data);
+			navigate('/', { replace: true });
+			localStorage.setItem('token', data.token);
+			localStorage.removeItem('pending_token');
+			console.log('pending-token', data);
 		} catch (error) {
 			setError(error instanceof Error ? error.message : 'Something Happened');
 		} finally {

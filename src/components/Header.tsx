@@ -1,7 +1,8 @@
 import { LogOut } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function Header() {
+	const navigate = useNavigate();
 	return (
 		<div className="header flex justify-around items-center bg-gray-800 text-white p-4">
 			<div className="hover:text-[#d70900]">UBA Resource Repository</div>
@@ -68,6 +69,7 @@ function Header() {
 						if (token) {
 							localStorage.removeItem('token');
 							alert('Logout Successful');
+							navigate('/login', { replace: true });
 						}
 					}}
 				/>

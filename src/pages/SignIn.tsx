@@ -4,33 +4,30 @@ import LoginHeader from '../components/LoginHeader';
 
 function SignIn() {
 	return (
-		<div className="min-h-screen flex items-center justify-center">
-			{/* Header */}
-			<div className="absolute top-0 left-0 right-0 flex justify-around items-center p-4">
+		<div className="relative min-h-screen bg-[url('/urr3.jpeg')] bg-cover bg-center">
+			<div className="absolute inset-0 bg-black/40"></div>
+
+			<div className="absolute top-0 left-0 right-0 z-10 flex justify-around items-center p-4">
 				<LoginHeader />
 			</div>
 
-			{/* Image + Login */}
-			<div className="flex w-full min-h-screen">
-				{/* Image */}
-				<div className="w-1/2">
-					<img
-						src="/urr1.jpeg"
-						alt="background"
-						className="w-full h-full object-cover"
-					/>
-				</div>
-
-				{/* Login */}
-				<div className="w-1/2 flex items-center justify-center">
-					<div className="w-full max-w-md bg-white rounded-md px-8 py-9 shadow-xl">
+			<div className="relative z-10 min-h-screen flex items-center justify-center px-16">
+				<div className="flex items-center gap-12">
+					{/* Tagline — right, close to the card */}
+					<div className="max-w-sm text-white">
+						<h1 className="text-4xl font-bold leading-tight">
+							UBA Resource Repository
+						</h1>
+						<p className="text-lg text-white/80 mt-4">Your subtitle goes here</p>
+					</div>
+					{/* Login card — left */}
+					<div className="w-full max-w-md bg-white/85 backdrop-blur-sm rounded-md px-8 py-9 shadow-2xl">
 						<Login />
 					</div>
 				</div>
 			</div>
 
-			{/* Footer */}
-			<div className="absolute bottom-0 left-0 right-0 flex justify-between items-center p-4">
+			<div className="absolute bottom-0 left-0 right-0 z-10 flex justify-between items-center p-4">
 				<LoginFooter />
 			</div>
 		</div>
@@ -38,3 +35,21 @@ function SignIn() {
 }
 
 export default SignIn;
+
+// {/* <div className="relative flex w-full min-h-screen">
+// 				{/* Image */}
+// 				<div className="w-full">
+// 					<img
+// 						src="/urr3.jpeg"
+// 						alt="background"
+// 						className="w-full h-full object-cover"
+// 					/>
+// 				</div> */}
+
+{
+	/* <div className="relative z-10 min-h-screen flex items-center justify-end">
+	<div className="w-full max-w-md bg-white/60 rounded-md px-8 py-9 shadow-xl mr-80">
+		<Login />
+	</div>
+</div>; */
+}

@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 import Layout from './layout/Layout';
+import Search from './pages/Search';
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<Route element={<Layout />}>
 					<Route path="/" element={<Dashboard />} />
 					<Route path="/about" element={<About />} />
+					<Route path="/search" element={<Search />} />
 				</Route>
 			</Route>
 		</Routes>

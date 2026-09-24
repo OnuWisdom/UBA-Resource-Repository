@@ -16,7 +16,7 @@ function Search() {
 	const [searchParams] = useSearchParams();
 	const query = searchParams.get('q') || '';
 
-	const [results, setResults] = useState([]);
+	const [results, setResults] = useState<SearchType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +56,6 @@ function Search() {
 			{results.map((resource) => (
 				<div key={resource.id}>
 					<h2>{resource.name}</h2>
-					<p>{resource.description}</p>
 				</div>
 			))}
 		</div>

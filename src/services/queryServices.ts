@@ -16,7 +16,7 @@ export async function getFunctionService() {
 
 	if (!response.ok) {
 		// const errorData = await response.json().catch(() => null)
-		throw new Error('cannot get department');
+		throw new Error('cannot get function');
 	}
 
 	return await response.json();
@@ -27,7 +27,20 @@ export async function getResourceService() {
 
 	if (!response.ok) {
 		// const errorData = await response.json().catch(() => null)
-		throw new Error('cannot get department');
+		throw new Error('cannot get resource type');
+	}
+
+	return await response.json();
+}
+
+export async function searchResourceService(search: string) {
+	const response = await fetch(
+		`${BASE_URL}/api/resources/?search=${encodeURIComponent(search)}`,
+	);
+
+	if (!response.ok) {
+		// const errorData = await response.json().catch(() => null)
+		throw new Error('Failed to fetch Search resources');
 	}
 
 	return await response.json();

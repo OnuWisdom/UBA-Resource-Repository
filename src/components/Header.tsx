@@ -4,14 +4,14 @@ import { NavLink, useNavigate } from 'react-router-dom';
 function Header() {
 	const navigate = useNavigate();
 	return (
-		<div className="header flex justify-around items-center bg-gray-800 text-white p-4">
+		<div className="header flex justify-around items-center bg-white text-black p-4">
 			<div className="hover:text-[#d70900]">UBA Resource Repository</div>
 
 			<nav className="flex space-x-6">
 				<NavLink
 					to="/"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Home
@@ -20,7 +20,7 @@ function Header() {
 				<NavLink
 					to="/resources"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Resource
@@ -28,7 +28,7 @@ function Header() {
 				<NavLink
 					to="/department"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Department
@@ -36,7 +36,7 @@ function Header() {
 				<NavLink
 					to="/functions"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Function
@@ -44,7 +44,7 @@ function Header() {
 				<NavLink
 					to="/resource-types"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Resource Type
@@ -52,7 +52,7 @@ function Header() {
 				<NavLink
 					to="/about"
 					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-white'}`
+						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					About

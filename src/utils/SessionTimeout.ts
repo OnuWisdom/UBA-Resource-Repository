@@ -18,8 +18,8 @@ function SessionTimeout() {
 					navigate('/login', { replace: true });
 				},
 				// 1 * 60 * 1000,
-				5 * 1000,
-			); // 5 minutes
+				5 * 60 * 1000,
+			);
 		};
 
 		events.forEach((event) => {

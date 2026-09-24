@@ -6,6 +6,9 @@ import { Routes, Route } from 'react-router-dom';
 import ProtectedRoutes from './utils/ProtectedRoutes';
 import Layout from './layout/Layout';
 import Search from './pages/Search';
+import Functions from './pages/Function';
+import Departments from './pages/Department';
+import ResourceTypes from './pages/Resources';
 
 function App() {
 	return (
@@ -17,6 +20,9 @@ function App() {
 					<Route path="/" element={<Dashboard />} />
 					<Route path="/about" element={<About />} />
 					<Route path="/search" element={<Search />} />
+					<Route path="/functions" element={<Functions />} />
+					<Route path="/department" element={<Departments />} />
+					<Route path="/resources" element={<ResourceTypes />} />
 				</Route>
 			</Route>
 		</Routes>

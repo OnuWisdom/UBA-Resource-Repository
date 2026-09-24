@@ -60,15 +60,15 @@ function Header() {
 			</nav>
 
 			<div className="flex relative items-center">
-				<img src="/uba.png" alt="UBA Logo" width={100} height={100} />
+				<img src="/uba.png" alt="UBA Logo" width={40} height={40} />
 				<LogOut
 					size={20}
 					className="absolute -right-20 cursor-pointer"
 					onClick={() => {
-						const token = localStorage.getItem('token');
+						const token = sessionStorage.getItem('token');
 						if (token) {
 							sessionStorage.removeItem('token');
-							alert('Logout Successful');
+							// alert('Logout Successful');
 							navigate('/login', { replace: true });
 						}
 					}}

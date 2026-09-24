@@ -9,7 +9,7 @@ import {
 	Wallet,
 	type LucideIcon,
 } from 'lucide-react';
-import BrowseByDeptCard from './BrowseByDeptCard';
+import BrowseCard from './BrowseCards';
 import { useEffect, useState } from 'react';
 import { getDepartmentService } from '../services/queryServices';
 
@@ -59,9 +59,7 @@ function BrowseByDept() {
 			<div className="m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{deptData.map((dept) => {
 					const Icon = deptIcons[dept.slug] || default_icon;
-					return (
-						<BrowseByDeptCard key={dept.id} title={dept.name} icon={<Icon />} />
-					);
+					return <BrowseCard key={dept.id} title={dept.name} icon={<Icon />} />;
 				})}
 				;
 			</div>

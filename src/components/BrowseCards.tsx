@@ -9,7 +9,7 @@ interface CardProps {
 	// linkTo: string;
 }
 
-function BrowseByDeptCard({ title, icon }: CardProps) {
+function BrowseCard({ title, icon }: CardProps) {
 	const navigate = useNavigate();
 
 	const handleClick = () => {
@@ -29,4 +29,4 @@ function BrowseByDeptCard({ title, icon }: CardProps) {
 	);
 }
 
-export default BrowseByDeptCard;
+export default BrowseCard;

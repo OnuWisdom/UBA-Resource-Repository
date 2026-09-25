@@ -41,14 +41,14 @@ function Header() {
 				>
 					Function
 				</NavLink>
-				<NavLink
+				{/* <NavLink
 					to="/resource-types"
 					className={({ isActive }) =>
 						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
 					}
 				>
 					Resource Type
-				</NavLink>
+				</NavLink> */}
 				<NavLink
 					to="/about"
 					className={({ isActive }) =>

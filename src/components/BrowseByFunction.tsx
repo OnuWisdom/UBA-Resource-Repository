@@ -56,7 +56,7 @@ function BrowseByFunction() {
 			<h1 className="font-bold text-xl text-center p-4 bg-slate-50">
 				Browse by Function
 			</h1>
-			<div className="m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+			<div className="w-[70%] mx-auto m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{functionData.map((dept) => {
 					const Icon = deptIcons[dept.slug] || default_icon;
 					return <BrowseCard key={dept.id} title={dept.name} icon={<Icon />} />;

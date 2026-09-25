@@ -11,18 +11,32 @@ function SignIn() {
 				<LoginHeader />
 			</div>
 
-			<div className="relative z-10 min-h-screen flex items-center px-16">
+			<div className="relative z-10 min-h-screen flex items-center px-48">
 				<div className="w-full flex items-center justify-between">
-					{/* Left - Writeup */}
 					<div className="w-1/2 text-left text-white">
-						<h1 className="text-4xl font-bold leading-tight">Stop Guessing,</h1>
-						<h1 className="text-4xl font-bold leading-tight">Start Finding</h1>
-						<p className="text-xl text-white/80 mt-4">
-							Your One stop to all things resource
+						<h1
+							className="animate-fade-up font-['Manrope'] text-5xl font-medium leading-[1.05] tracking-[-0.03em]"
+							style={{ animationDelay: '0.2s' }}
+						>
+							Stop Guessing,
+						</h1>
+
+						<h1
+							className="animate-fade-up font-['Manrope'] text-6xl font-extrabold leading-[1.05] tracking-[-0.04em]"
+							style={{ animationDelay: '0.5s' }}
+						>
+							Start Finding.
+						</h1>
+
+						<p
+							className="animate-fade-up mt-6 max-w-md font-['Manrope'] text-lg font-medium leading-relaxed text-white/75"
+							style={{ animationDelay: '0.8s' }}
+						>
+							Your one-stop destination for everything you need to navigate UBA's
+							digital resources.
 						</p>
 					</div>
 
-					{/* Right - Login Form */}
 					<div className="w-full max-w-md bg-white/85 backdrop-blur-sm rounded-md px-8 py-9 shadow-2xl">
 						<Login />
 					</div>

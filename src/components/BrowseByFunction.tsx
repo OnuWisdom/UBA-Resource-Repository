@@ -53,7 +53,7 @@ function BrowseByFunction() {
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl text-center p-4 bg-slate-50">
+			<h1 className="font-bold text-xl text-center p-4 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
 				Browse by Function
 			</h1>
 			<div className="w-[70%] mx-auto m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

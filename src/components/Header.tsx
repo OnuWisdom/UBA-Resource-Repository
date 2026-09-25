@@ -60,7 +60,7 @@ function Header() {
 			</nav>
 
 			<div className="flex relative items-center">
-				<img src="/uba.png" alt="UBA Logo" width={40} height={40} />
+				<img src="/seed.png" alt="UBA Logo" width={40} height={40} />
 				<LogOut
 					size={20}
 					className="absolute -right-20 cursor-pointer"

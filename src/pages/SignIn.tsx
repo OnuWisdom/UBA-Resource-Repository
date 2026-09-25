@@ -11,16 +11,18 @@ function SignIn() {
 				<LoginHeader />
 			</div>
 
-			<div className="relative z-10 min-h-screen flex items-center justify-center px-16">
-				<div className="flex items-center gap-12">
-					{/* Tagline — right, close to the card */}
-					<div className="max-w-sm text-white">
-						<h1 className="text-4xl font-bold leading-tight">
-							UBA Resource Repository
-						</h1>
-						<p className="text-lg text-white/80 mt-4">Your subtitle goes here</p>
+			<div className="relative z-10 min-h-screen flex items-center px-16">
+				<div className="w-full flex items-center justify-between">
+					{/* Left - Writeup */}
+					<div className="w-1/2 text-left text-white">
+						<h1 className="text-4xl font-bold leading-tight">Stop Guessing,</h1>
+						<h1 className="text-4xl font-bold leading-tight">Start Finding</h1>
+						<p className="text-xl text-white/80 mt-4">
+							Your One stop to all things resource
+						</p>
 					</div>
-					{/* Login card — left */}
+
+					{/* Right - Login Form */}
 					<div className="w-full max-w-md bg-white/85 backdrop-blur-sm rounded-md px-8 py-9 shadow-2xl">
 						<Login />
 					</div>

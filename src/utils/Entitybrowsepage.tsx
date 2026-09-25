@@ -64,36 +64,44 @@ function EntityBrowsePage({
 	}, [fetchService]);
 
 	return (
-		<div className="min-h-screen bg-slate-50">
-			<div className="bg-white border-b border-slate-200">
+		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+			<div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
 				<div className="max-w-6xl mx-auto px-6 py-6">
-					<div className="text-sm text-slate-500 mb-3">
+					<div className="text-sm text-slate-500 dark:text-slate-400 mb-3">
 						<span
-							className="hover:text-[#c8102e] cursor-pointer"
+							className="hover:text-[#c8102e] dark:hover:text-[#e8495f] cursor-pointer"
 							onClick={() => navigate('/')}
 						>
 							Home
 						</span>
 						<span className="mx-2">›</span>
-						<span className="text-slate-700 font-medium">{breadcrumbLabel}</span>
+						<span className="text-slate-700 dark:text-slate-300 font-medium">
+							{breadcrumbLabel}
+						</span>
 					</div>
-					<h1 className="text-3xl font-bold text-slate-900">{pageTitle}</h1>
-					<p className="text-slate-500 mt-1">{pageSubtitle}</p>
+					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+						{pageTitle}
+					</h1>
+					<p className="text-slate-500 dark:text-slate-400 mt-1">{pageSubtitle}</p>
 				</div>
 			</div>
 
 			<div className="max-w-6xl mx-auto px-6 py-8">
-				{loading && <p className="text-sm text-slate-500">Loading...</p>}
+				{loading && (
+					<p className="text-sm text-slate-500 dark:text-slate-400">Loading...</p>
+				)}
 
 				{error && (
-					<div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 p-3 rounded-md text-sm">
+					<div className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 p-3 rounded-md text-sm">
 						<CircleAlert size={16} />
 						{error}
 					</div>
 				)}
 
 				{!loading && !error && items.length === 0 && (
-					<p className="text-sm text-slate-500">Nothing to show yet.</p>
+					<p className="text-sm text-slate-500 dark:text-slate-400">
+						Nothing to show yet.
+					</p>
 				)}
 
 				{!loading && !error && items.length > 0 && (

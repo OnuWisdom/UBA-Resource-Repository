@@ -21,10 +21,10 @@ function EntityCard({
 	return (
 		<div
 			onClick={onClick}
-			className="bg-white border border-slate-200 rounded-lg shadow-sm p-5 flex flex-col h-full cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+			className="bg-white dark:bg-neutral-100 border border-slate-200 dark:border-neutral-300 rounded-lg shadow-sm p-5 flex flex-col h-full cursor-pointer hover:shadow-md dark:hover:border-neutral-400 hover:-translate-y-0.5 transition-all duration-200"
 		>
 			<div className="flex items-start gap-3 mb-3">
-				<div className="bg-red-50 p-2.5 rounded-md">
+				<div className="bg-red-50 dark:bg-red-100 p-2.5 rounded-md">
 					<Icon className="text-[#c8102e]" size={20} />
 				</div>
 				<div>

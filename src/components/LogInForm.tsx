@@ -123,7 +123,7 @@ export default function Login() {
 						className="w-full h-12 mt-8 bg-[#d70900] hover:bg-[#c90500] text-white text-[18px] rounded-md transition disabled:cursor-not-allowed"
 						disabled={loading}
 					>
-						{loading ? 'Loggin In' : 'Log in'}
+						{loading ? 'Authenticating...' : 'Log in'}
 					</button>
 				</form>
 			) : (
@@ -148,7 +148,7 @@ export default function Login() {
 						className="w-full h-12 mt-16 bg-[#d70900] hover:bg-[#c90500] text-white text-[18px] rounded-md transition disabled:cursor-not-allowed"
 						disabled={loading}
 					>
-						{loading ? 'Loggin In' : 'Log in'}
+						{loading ? 'Signing In' : 'Log in'}
 					</button>
 				</form>
 			)}

@@ -71,8 +71,12 @@ import {
 	FileText,
 	ArrowRight,
 	CircleAlert,
+	SearchX,
+	Building2,
+	BriefcaseBusiness,
 } from 'lucide-react';
 import { searchResourceService } from '../services/queryServices';
+import { Link } from 'react-router-dom';
 
 type ResourceRef = {
 	id: number;
@@ -93,6 +97,8 @@ type SearchType = {
 	created_at: string;
 	updated_at: string;
 };
+
+const suggestedSearches = ['leave', 'expense', 'password', 'training'];
 
 function Search() {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -129,7 +135,10 @@ function Search() {
 
 	const handleSearch = (e: React.FormEvent) => {
 		e.preventDefault();
-		setSearchParams({ q: inputValue });
+		const nextQuery = inputValue.trim();
+		if (nextQuery) {
+			setSearchParams({ q: nextQuery });
+		}
 	};
 
 	return (
@@ -191,7 +200,44 @@ function Search() {
 				)}
 
 				{!loading && !error && query && results.length === 0 && (
-					<p className="text-sm text-slate-500">No resources found for "{query}".</p>
+					<div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
+						<SearchX size={28} className="mx-auto mb-3 text-slate-400" />
+						<h2 className="text-lg font-semibold text-slate-800">
+							No resources found for “{query}”
+						</h2>
+						<p className="mt-2 text-sm text-slate-500">
+							Try a shorter phrase, a different keyword, or browse resources by category.
+						</p>
+						<div className="mt-4 flex flex-wrap justify-center gap-2">
+							{suggestedSearches.map((suggestion) => (
+								<button
+									key={suggestion}
+									type="button"
+									onClick={() => {
+										setInputValue(suggestion);
+										setSearchParams({ q: suggestion });
+									}}
+									className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-700 transition hover:border-[#c8102e]/40 hover:text-[#c8102e]"
+								>
+									{suggestion}
+								</button>
+							))}
+						</div>
+						<div className="mt-5 flex flex-wrap justify-center gap-3">
+							<Link
+								to="/department"
+								className="inline-flex items-center gap-2 text-sm font-medium text-[#c8102e] hover:underline"
+							>
+								<Building2 size={16} /> Browse departments
+							</Link>
+							<Link
+								to="/functions"
+								className="inline-flex items-center gap-2 text-sm font-medium text-[#c8102e] hover:underline"
+							>
+								<BriefcaseBusiness size={16} /> Browse functions
+							</Link>
+						</div>
+					</div>
 				)}
 
 				{!loading && !error && results.length > 0 && (
@@ -257,9 +303,20 @@ function Search() {
 											<ArrowRight size={14} />
 										</a>
 									) : (
-										<span className="flex items-center gap-1 text-sm font-medium text-slate-300 cursor-not-allowed">
-											No link available
-										</span>
+										<div className="flex flex-col items-end gap-1">
+											<span className="text-xs text-slate-400">
+												Resource link not listed
+											</span>
+											{resource.departments?.[0] && (
+												<Link
+													to={`/department/${resource.departments[0].slug}`}
+													className="flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+												>
+													Browse {resource.departments[0].name}
+													<ArrowRight size={14} />
+												</Link>
+											)}
+										</div>
 									)}
 								</div>
 							</div>

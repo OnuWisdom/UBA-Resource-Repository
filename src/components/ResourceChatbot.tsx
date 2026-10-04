@@ -7,6 +7,7 @@ import {
 	Send,
 	X,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
 	searchResourceService,
 	type ResourceSearchResult,
@@ -17,6 +18,7 @@ type ChatMessage = {
 	role: 'user' | 'assistant';
 	text: string;
 	resources?: ResourceSearchResult[];
+	suggestions?: string[];
 };
 
 const stopWords = new Set([
@@ -90,6 +92,7 @@ function rankResources(resources: ResourceSearchResult[], terms: string[]) {
 }
 
 function ResourceChatbot() {
+	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = useState(false);
 	const [question, setQuestion] = useState('');
 	const [isSearching, setIsSearching] = useState(false);
@@ -108,9 +111,8 @@ function ResourceChatbot() {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 	}, [messages, isSearching]);
 
-	const sendQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const submittedQuestion = question.trim();
+	const askQuestion = async (questionText: string) => {
+		const submittedQuestion = questionText.trim();
 		if (!submittedQuestion || isSearching) return;
 
 		const userMessageId = nextMessageId.current++;
@@ -166,6 +168,9 @@ function ResourceChatbot() {
 						? `I found ${results.length} resource${results.length === 1 ? '' : 's'} that may help:`
 						: 'I couldn’t find a matching resource. Try different keywords or browse by department or function.',
 					resources: results,
+					suggestions: results.length
+						? undefined
+						: ['leave', 'expenses', 'passwords', 'training'],
 				},
 			]);
 		} catch (error) {
@@ -183,6 +188,13 @@ function ResourceChatbot() {
 		} finally {
 			setIsSearching(false);
 		}
+	};
+
+	const sendQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const submittedQuestion = question;
+		setQuestion('');
+		await askQuestion(submittedQuestion);
 	};
 
 	return (
@@ -263,10 +275,44 @@ function ResourceChatbot() {
 													Open resource <ArrowRight size={12} />
 												</a>
 											) : (
-												<p className="mt-2 text-xs text-slate-400">No link available</p>
+												<div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+													<p className="text-xs text-slate-400">
+														Resource link not listed
+													</p>
+													{resource.departments?.[0] && (
+														<button
+															type="button"
+															onClick={() => {
+																navigate(
+																	`/department/${resource.departments[0].slug}`,
+																);
+																setIsOpen(false);
+															}}
+															className="inline-flex items-center gap-1 text-xs font-medium text-[#c8102e] hover:underline"
+														>
+															Browse {resource.departments[0].name}
+															<ArrowRight size={12} />
+														</button>
+													)}
+												</div>
 											)}
 										</div>
 									))}
+									{message.suggestions && (
+										<div className="mt-3 flex flex-wrap gap-2">
+											{message.suggestions.map((suggestion) => (
+												<button
+													key={suggestion}
+													type="button"
+													onClick={() => void askQuestion(suggestion)}
+													disabled={isSearching}
+													className="rounded-full border border-slate-200 px-2.5 py-1 text-xs text-[#c8102e] transition hover:bg-red-50 disabled:opacity-50 dark:border-slate-600 dark:hover:bg-slate-700"
+												>
+													{suggestion}
+												</button>
+											))}
+										</div>
+									)}
 								</div>
 							</div>
 						))}

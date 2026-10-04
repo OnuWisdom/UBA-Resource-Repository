@@ -6,6 +6,8 @@ import {
 	CircleAlert,
 	FileQuestion,
 	LoaderCircle,
+	Building2,
+	ArrowLeft,
 } from 'lucide-react';
 import {
 	getDepartmentBySlugService,
@@ -228,9 +230,23 @@ function EntityDetail() {
 										<ArrowRight size={14} />
 									</a>
 								) : (
-									<span className="inline-flex items-center gap-1 text-sm font-medium text-slate-400">
-										No link available
-									</span>
+									<div className="flex flex-col items-end gap-1">
+										<span className="text-xs text-slate-400">
+											Resource link not listed
+										</span>
+										{resource.departments?.[0] && (
+											<button
+												type="button"
+												onClick={() =>
+													navigate(`/department/${resource.departments[0].slug}`)
+												}
+												className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+											>
+												Browse {resource.departments[0].name}
+												<ArrowRight size={14} />
+											</button>
+										)}
+									</div>
 								)}
 							</div>
 						</div>
@@ -240,7 +256,38 @@ function EntityDetail() {
 						{entityResources.length === 0 && (
 							<div className="mt-8 rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
 								<FileQuestion size={22} className="mx-auto mb-2 text-slate-400" />
-								No resources available for this {entityTypeLabel} yet.
+								<h2 className="font-semibold text-slate-800">
+									No resources available for this {entityTypeLabel} yet
+								</h2>
+								<p className="mt-2 text-sm">
+									Try another category or browse all available resources.
+								</p>
+								<div className="mt-4 flex flex-wrap justify-center gap-4">
+									<button
+										type="button"
+										onClick={() =>
+											navigate(
+												type === 'department'
+													? '/department'
+													: type === 'function'
+														? '/functions'
+														: '/resources',
+											)
+										}
+										className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+									>
+										<ArrowLeft size={14} />
+										Browse {parentLabel.toLowerCase()}
+									</button>
+									<button
+										type="button"
+										onClick={() => navigate('/search')}
+										className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+									>
+										<Building2 size={15} />
+										Search all resources
+									</button>
+								</div>
 							</div>
 						)}
 					</>

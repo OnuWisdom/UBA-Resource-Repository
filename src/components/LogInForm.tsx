@@ -66,6 +66,13 @@ export default function Login() {
 			setFieldErrors((prevErrors) => ({ ...prevErrors, otp: 'Token is required.' }));
 			return;
 		}
+		if (otp.trim().length > 8) {
+			setFieldErrors((prevErrors) => ({
+				...prevErrors,
+				otp: 'Token must be 8 characters or less.',
+			}));
+			return;
+		}
 		setFieldErrors((prevErrors) => ({ ...prevErrors, otp: undefined }));
 		setLoading(true);
 		setError(null);
@@ -175,6 +182,7 @@ export default function Login() {
 							type="text"
 							inputMode="numeric"
 							pattern="[0-9]*"
+							maxLength={8}
 							name="otp"
 							value={otp}
 							required

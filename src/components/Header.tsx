@@ -44,6 +44,14 @@ function Header() {
 				>
 					Function
 				</NavLink>
+				<NavLink
+					to="/feedback"
+					className={({ isActive }) =>
+						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
+					}
+				>
+					Feedback
+				</NavLink>
 				{/* <NavLink
 					to="/resource-types"
 					className={({ isActive }) =>

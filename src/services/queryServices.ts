@@ -1,5 +1,25 @@
 import { BASE_URL } from './../utils/config';
 
+export interface ResourceSearchRef {
+	id: number;
+	name: string;
+	slug: string;
+}
+
+export interface ResourceSearchResult {
+	id: number;
+	name: string;
+	slug: string;
+	description: string;
+	url: string;
+	departments: ResourceSearchRef[];
+	functions: ResourceSearchRef[];
+	resource_types: ResourceSearchRef[];
+	is_active: boolean;
+	created_at: string;
+	updated_at: string;
+}
+
 export async function getDepartmentService() {
 	const response = await fetch(`${BASE_URL}/api/resources/departments/`);
 
@@ -63,7 +83,7 @@ export async function getResourceTypeBySlugService(slug: string) {
 	return await response.json();
 }
 
-export async function searchResourceService(search: string) {
+export async function searchResourceService(search: string): Promise<ResourceSearchResult[]> {
 	const response = await fetch(
 		`${BASE_URL}/api/resources/?search=${encodeURIComponent(search)}`,
 	);
@@ -73,5 +93,5 @@ export async function searchResourceService(search: string) {
 		throw new Error('Failed to fetch Search resources');
 	}
 
-	return await response.json();
+	return (await response.json()) as ResourceSearchResult[];
 }

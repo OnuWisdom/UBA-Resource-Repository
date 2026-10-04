@@ -59,7 +59,15 @@ function BrowseByFunction() {
 			<div className="w-[70%] mx-auto m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{functionData.map((dept) => {
 					const Icon = deptIcons[dept.slug] || default_icon;
-					return <BrowseCard key={dept.id} title={dept.name} icon={<Icon />} />;
+					return (
+						<BrowseCard
+							key={dept.id}
+							title={dept.name}
+							description={dept.description}
+							icon={<Icon />}
+							route="/functions"
+						/>
+					);
 				})}
 				;
 			</div>

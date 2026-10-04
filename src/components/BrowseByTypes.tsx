@@ -59,7 +59,15 @@ function BrowseByTypes() {
 			<div className="m-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 				{typesData.map((dept) => {
 					const Icon = deptIcons[dept.slug] || default_icon;
-					return <BrowseCard key={dept.id} title={dept.name} icon={<Icon />} />;
+					return (
+						<BrowseCard
+							key={dept.id}
+							title={dept.name}
+							description={dept.description}
+							icon={<Icon />}
+							route="/resources"
+						/>
+					);
 				})}
 				;
 			</div>

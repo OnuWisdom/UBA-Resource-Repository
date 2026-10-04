@@ -33,6 +33,36 @@ export async function getResourceService() {
 	return await response.json();
 }
 
+export async function getDepartmentBySlugService(slug: string) {
+	const response = await fetch(`${BASE_URL}/api/resources/departments/${slug}/`);
+
+	if (!response.ok) {
+		throw new Error('cannot get department details');
+	}
+
+	return await response.json();
+}
+
+export async function getFunctionBySlugService(slug: string) {
+	const response = await fetch(`${BASE_URL}/api/resources/functions/${slug}/`);
+
+	if (!response.ok) {
+		throw new Error('cannot get function details');
+	}
+
+	return await response.json();
+}
+
+export async function getResourceTypeBySlugService(slug: string) {
+	const response = await fetch(`${BASE_URL}/api/resources/types/${slug}/`);
+
+	if (!response.ok) {
+		throw new Error('cannot get resource type details');
+	}
+
+	return await response.json();
+}
+
 export async function searchResourceService(search: string) {
 	const response = await fetch(
 		`${BASE_URL}/api/resources/?search=${encodeURIComponent(search)}`,

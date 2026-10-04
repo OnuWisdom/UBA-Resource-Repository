@@ -113,7 +113,11 @@ function EntityBrowsePage({
 								title={item.name}
 								description={item.description || undefined}
 								linkLabel={linkLabel}
-								onClick={() => navigate(`${routeBase}/${item.slug}`)}
+								onClick={() =>
+									navigate(`/${routeBase.replace('/', '')}/${item.slug}`, {
+										state: { entity: item },
+									})
+								}
 							/>
 						))}
 					</div>

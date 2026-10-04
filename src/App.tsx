@@ -9,6 +9,7 @@ import Search from './pages/Search';
 import Functions from './pages/Function';
 import Departments from './pages/Department';
 import ResourceTypes from './pages/Resources';
+import EntityDetail from './pages/EntityDetail';
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 					<Route path="/functions" element={<Functions />} />
 					<Route path="/department" element={<Departments />} />
 					<Route path="/resources" element={<ResourceTypes />} />
+					<Route path="/:type/:slug" element={<EntityDetail />} />
 				</Route>
 			</Route>
 		</Routes>

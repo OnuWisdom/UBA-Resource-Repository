@@ -41,6 +41,8 @@ export interface ResourceSubmission
 	functions: SubmissionCategory[];
 	created_at?: string;
 	status?: string;
+	approval_status?: string;
+	review_status?: string;
 }
 
 function getSubmissionError(payload: unknown): string | undefined {

@@ -20,7 +20,7 @@ const deptIcons: Record<string, LucideIcon> = {
 	communication: MessageSquare,
 	performance: ChartNoAxesCombined,
 	reporting: ChartColumn,
-	request: GitPullRequestDraft,
+	requests: GitPullRequestDraft,
 };
 
 interface Department {
@@ -65,7 +65,7 @@ function BrowseByFunction() {
 							title={dept.name}
 							description={dept.description}
 							icon={<Icon />}
-							route="/functions"
+							route={`/functions/${dept.slug}`}
 						/>
 					);
 				})}

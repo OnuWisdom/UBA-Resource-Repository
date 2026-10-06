@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
 	FileText,
 	ArrowRight,
@@ -41,6 +41,9 @@ function EntityDetail() {
 	const { type, slug } = useParams();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const isDepartment = type === 'department';
+	const isFunction = type === 'function' || type === 'functions';
+	const isResourceType = type === 'resource-types' || type === 'resource-type';
 	const routeEntity = (location.state as { entity?: EntityRouteState } | null)?.entity;
 	const [entity, setEntity] = useState<EntityDetailResponse | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -62,18 +65,17 @@ function EntityDetail() {
 
 				let data: EntityDetailResponse | null = null;
 
-				if (type === 'department') {
+				if (isDepartment) {
 					data = await getDepartmentBySlugService(slug);
-				} else if (type === 'function') {
+				} else if (isFunction) {
 					data = await getFunctionBySlugService(slug);
-				} else if (type === 'resource-types' || type === 'resource-type') {
+				} else if (isResourceType) {
 					data = await getResourceTypeBySlugService(slug);
+				} else {
+					throw new Error('Unsupported resource category.');
 				}
 
 				if (!cancelled) {
-					if (!data) {
-						throw new Error('No matching entity found.');
-					}
 					setEntity(data);
 				}
 			} catch (err) {
@@ -91,7 +93,7 @@ function EntityDetail() {
 		return () => {
 			cancelled = true;
 		};
-	}, [type, slug, location.state]);
+	}, [type, slug, location.state, isDepartment, isFunction, isResourceType]);
 
 	const currentEntity =
 		entity?.slug === slug
@@ -109,29 +111,30 @@ function EntityDetail() {
 	const entityDescription = currentEntity?.description ?? '';
 	const entityResources = currentEntity?.resources ?? [];
 	const entityTypeLabel =
-		type === 'department' ? 'department' : type === 'function' ? 'function' : 'resource type';
+		isDepartment ? 'department' : isFunction ? 'function' : 'resource type';
 	const parentLabel =
-		type === 'department' ? 'Departments' : type === 'function' ? 'Functions' : 'Resource Types';
+		isDepartment ? 'Departments' : isFunction ? 'Functions' : 'Resource Types';
+	const parentPath =
+		isDepartment ? '/department' : isFunction ? '/functions' : '/resources';
 
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
 			<div className="max-w-6xl mx-auto px-6 py-6">
 				<div className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-					<span
-						className="hover:text-[#c8102e] cursor-pointer"
-						onClick={() => navigate('/')}
-					>
+					<Link to="/" className="hover:text-[#c8102e]">
 						Home
-					</span>
+					</Link>
+					<span className="mx-2">›</span>
+					<Link to={parentPath} className="hover:text-[#c8102e]">
+						{parentLabel}
+					</Link>
 					<span className="mx-2">›</span>
 					<span
-						className="hover:text-[#c8102e] cursor-pointer"
-						onClick={() => navigate(type === 'department' ? '/department' : type === 'function' ? '/functions' : '/resources')}
+						className="font-medium text-slate-700 dark:text-slate-300"
+						aria-current="page"
 					>
-						{parentLabel}
+						{entityName}
 					</span>
-					<span className="mx-2">›</span>
-					<span className="text-slate-700 dark:text-slate-300 font-medium">{entityName}</span>
 				</div>
 
 				<h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-100">

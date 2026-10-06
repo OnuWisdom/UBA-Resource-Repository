@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircleAlert, LoaderCircle } from 'lucide-react';
+import { CircleAlert, Eye, EyeOff, LoaderCircle } from 'lucide-react';
 import { loginService, tokenService } from '../services/loginService';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ export default function Login() {
 		password: '',
 	});
 	const [otp, setOtp] = useState<string>('');
+	const [showPassword, setShowPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [fieldErrors, setFieldErrors] = useState<{
@@ -165,17 +166,32 @@ export default function Login() {
 					<div className="mb-1">
 						<label className="block text-[18px] text-black mb-1">Password</label>
 
-						<input
-							type="password"
-							name="password"
-							value={loginData.password}
-							required
-							aria-invalid={Boolean(fieldErrors.password)}
-							aria-describedby={fieldErrors.password ? 'password-error' : undefined}
-							placeholder="Enter your password"
-							className="w-full h-12 bg-white border border-slate-300 rounded-md px-3 text-base text-slate-700 outline-none focus:ring-2 focus:ring-[#c8102e]/40 focus:border-[#c8102e] transition-colors"
-							onChange={handleChange}
-						/>
+						<div className="relative">
+							<input
+								type={showPassword ? 'text' : 'password'}
+								name="password"
+								value={loginData.password}
+								required
+								aria-invalid={Boolean(fieldErrors.password)}
+								aria-describedby={fieldErrors.password ? 'password-error' : undefined}
+								placeholder="Enter your password"
+								className="w-full h-12 bg-white border border-slate-300 rounded-md pl-3 pr-12 text-base text-slate-700 outline-none focus:ring-2 focus:ring-[#c8102e]/40 focus:border-[#c8102e] transition-colors"
+								onChange={handleChange}
+							/>
+							<button
+								type="button"
+								onClick={() => setShowPassword((visible) => !visible)}
+								className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500 transition-colors hover:text-[#c8102e] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c8102e]"
+								aria-label={showPassword ? 'Hide password' : 'Show password'}
+								aria-pressed={showPassword}
+							>
+								{showPassword ? (
+									<EyeOff size={20} aria-hidden="true" />
+								) : (
+									<Eye size={20} aria-hidden="true" />
+								)}
+							</button>
+						</div>
 						{fieldErrors.password && (
 							<p
 								id="password-error"

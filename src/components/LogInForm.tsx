@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { CircleAlert, LoaderCircle } from 'lucide-react';
 import { loginService, tokenService } from '../services/loginService';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,10 +27,12 @@ export default function Login() {
 			[name]: value,
 		}));
 		setFieldErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
+		setError(null);
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setError(null);
 		const nextFieldErrors: typeof fieldErrors = {};
 		if (!loginData.username.trim()) {
 			nextFieldErrors.username = 'Username is required.';
@@ -54,7 +56,13 @@ export default function Login() {
 
 			setStep('token');
 		} catch (error) {
-			setError(error instanceof Error ? error.message : 'Something Happened');
+			setError(
+				error instanceof TypeError
+					? 'We couldn’t connect to the sign-in service. Check your connection and try again.'
+					: error instanceof Error
+						? error.message
+						: 'We couldn’t sign you in. Please try again.',
+			);
 		} finally {
 			setLoading(false);
 		}
@@ -62,8 +70,12 @@ export default function Login() {
 
 	const handleTokenValidation = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setError(null);
 		if (!otp.trim()) {
-			setFieldErrors((prevErrors) => ({ ...prevErrors, otp: 'Token is required.' }));
+			setFieldErrors((prevErrors) => ({
+				...prevErrors,
+				otp: 'Token is required.',
+			}));
 			return;
 		}
 		if (otp.trim().length > 8) {
@@ -92,7 +104,13 @@ export default function Login() {
 			navigate('/', { replace: true });
 			console.log('pending-token', data);
 		} catch (error) {
-			setError(error instanceof Error ? error.message : 'Something Happened');
+			setError(
+				error instanceof TypeError
+					? 'We couldn’t connect to the verification service. Check your connection and try again.'
+					: error instanceof Error
+						? error.message
+						: 'We couldn’t verify that code. Please try again.',
+			);
 		} finally {
 			setLoading(false);
 		}
@@ -109,7 +127,14 @@ export default function Login() {
 					</p>
 
 					{error && (
-						<div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>
+						<div
+							className="mb-4 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+							role="alert"
+							aria-live="polite"
+						>
+							<CircleAlert size={18} className="mt-0.5 shrink-0" />
+							<p>{error}</p>
+						</div>
 					)}
 
 					<div className="mb-1">
@@ -127,7 +152,11 @@ export default function Login() {
 							onChange={handleChange}
 						/>
 						{fieldErrors.username && (
-							<p id="username-error" className="mt-1 text-sm text-red-700" role="alert">
+							<p
+								id="username-error"
+								className="mt-1 text-sm text-red-700"
+								role="alert"
+							>
 								{fieldErrors.username}
 							</p>
 						)}
@@ -148,7 +177,11 @@ export default function Login() {
 							onChange={handleChange}
 						/>
 						{fieldErrors.password && (
-							<p id="password-error" className="mt-1 text-sm text-red-700" role="alert">
+							<p
+								id="password-error"
+								className="mt-1 text-sm text-red-700"
+								role="alert"
+							>
 								{fieldErrors.password}
 							</p>
 						)}
@@ -169,12 +202,30 @@ export default function Login() {
 						disabled={loading}
 						aria-busy={loading}
 					>
-						{loading && <LoaderCircle size={20} className="animate-spin" aria-hidden="true" />}
+						{loading && (
+							<LoaderCircle size={20} className="animate-spin" aria-hidden="true" />
+						)}
 						{loading ? 'Authenticating...' : 'Log in'}
 					</button>
 				</form>
 			) : (
 				<form onSubmit={handleTokenValidation} noValidate>
+					<h1 className="text-[30px] font-normal text-black">Verify your sign-in</h1>
+					<p className="mb-7 mt-1 text-[16px] text-black">
+						Enter the 8-digit code from enthrust.
+					</p>
+
+					{error && (
+						<div
+							className="mb-4 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+							role="alert"
+							aria-live="polite"
+						>
+							<CircleAlert size={18} className="mt-0.5 shrink-0" />
+							<p>{error}</p>
+						</div>
+					)}
+
 					<div className="mb-2">
 						<label className="block text-[18px] text-black mb-1">Token</label>
 
@@ -193,6 +244,7 @@ export default function Login() {
 							onChange={(e) => {
 								setOtp(e.target.value);
 								setFieldErrors((prevErrors) => ({ ...prevErrors, otp: undefined }));
+								setError(null);
 							}}
 						/>
 						{fieldErrors.otp && (
@@ -208,7 +260,9 @@ export default function Login() {
 						disabled={loading}
 						aria-busy={loading}
 					>
-						{loading && <LoaderCircle size={20} className="animate-spin" aria-hidden="true" />}
+						{loading && (
+							<LoaderCircle size={20} className="animate-spin" aria-hidden="true" />
+						)}
 						{loading ? 'Signing In' : 'Log in'}
 					</button>
 				</form>

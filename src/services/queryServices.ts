@@ -20,6 +20,49 @@ export interface ResourceSearchResult {
 	updated_at: string;
 }
 
+export interface ResourceSubmissionPayload {
+	name: string;
+	description: string;
+	url: string;
+	resource_type: number;
+	departments: number[];
+	functions: number[];
+	submitter_name: string;
+	contact_email: string;
+}
+
+function getSubmissionError(payload: unknown): string | undefined {
+	if (!payload || typeof payload !== 'object') return undefined;
+	const body = payload as Record<string, unknown>;
+
+	for (const key of ['detail', 'message', 'error', 'non_field_errors']) {
+		const value = body[key];
+		if (typeof value === 'string' && value.trim()) return value;
+		if (Array.isArray(value)) {
+			const messages = value.filter(
+				(item): item is string =>
+					typeof item === 'string' && item.trim().length > 0,
+			);
+			if (messages.length) return messages.join(' ');
+		}
+	}
+
+	const fieldMessages = Object.entries(body).flatMap(([field, value]) => {
+		if (typeof value === 'string' && value.trim()) return [`${field}: ${value}`];
+		if (Array.isArray(value)) {
+			return value
+				.filter(
+					(item): item is string =>
+						typeof item === 'string' && item.trim().length > 0,
+				)
+				.map((message) => `${field}: ${message}`);
+		}
+		return [];
+	});
+
+	return fieldMessages.length ? fieldMessages.join(' ') : undefined;
+}
+
 function parseResourceList(payload: unknown): ResourceSearchResult[] {
 	if (Array.isArray(payload)) {
 		return payload as ResourceSearchResult[];
@@ -79,6 +122,58 @@ export async function getResourcesService(): Promise<ResourceSearchResult[]> {
 	return parseResourceList(await response.json());
 }
 
+export async function createResourceSubmissionService(
+	payload: ResourceSubmissionPayload,
+): Promise<void> {
+	const token = sessionStorage.getItem('token');
+	if (!token) {
+		throw new Error(
+			'Your session has expired. Please sign in again to submit a resource.',
+		);
+	}
+
+	const response = await fetch(`${BASE_URL}/api/submissions/`, {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json',
+			Authorization: `Token ${token}`,
+		},
+		body: JSON.stringify(payload),
+	});
+
+	if (!response.ok) {
+		const responseText = await response.text();
+		let message: string | undefined;
+		if (responseText) {
+			try {
+				message = getSubmissionError(JSON.parse(responseText) as unknown);
+			} catch {
+				message = undefined;
+			}
+		}
+
+		if (message) {
+			throw new Error(message);
+		}
+
+		if (response.status === 401) {
+			throw new Error(
+				'The submission service rejected your authentication (401). Your session token may be expired or the API may expect a different Authorization scheme.',
+			);
+		}
+
+		if (response.status === 403) {
+			throw new Error(
+				'The submission service understood your request but denied permission (403). Your account may not be allowed to submit resources.',
+			);
+		}
+
+		throw new Error(
+			`We couldn’t submit this resource suggestion (HTTP ${response.status}). Please try again.`,
+		);
+	}
+}
+
 export async function getDepartmentBySlugService(slug: string) {
 	const response = await fetch(`${BASE_URL}/api/resources/departments/${slug}/`);
 
@@ -109,7 +204,9 @@ export async function getResourceTypeBySlugService(slug: string) {
 	return await response.json();
 }
 
-export async function searchResourceService(search: string): Promise<ResourceSearchResult[]> {
+export async function searchResourceService(
+	search: string,
+): Promise<ResourceSearchResult[]> {
 	const response = await fetch(
 		`${BASE_URL}/api/resources/?search=${encodeURIComponent(search)}`,
 	);

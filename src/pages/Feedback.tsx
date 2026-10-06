@@ -14,6 +14,7 @@ import {
 	Trash2,
 } from 'lucide-react';
 import {
+	createResourceSubmissionService,
 	getDepartmentService,
 	getFunctionService,
 	getResourceService,
@@ -94,6 +95,10 @@ function Feedback() {
 	const [kind, setKind] = useState<FeedbackKind | null>(null);
 	const [draft, setDraft] = useState<FeedbackDraft>(emptyDraft);
 	const [submitted, setSubmitted] = useState(false);
+	const [submissionSent, setSubmissionSent] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submissionError, setSubmissionError] = useState<string | null>(null);
+	const [selectionError, setSelectionError] = useState<string | null>(null);
 	const [departments, setDepartments] = useState<FeedbackOption[]>([]);
 	const [functions, setFunctions] = useState<FeedbackOption[]>([]);
 	const [resourceTypes, setResourceTypes] = useState<FeedbackOption[]>([]);
@@ -137,6 +142,7 @@ function Feedback() {
 	}, []);
 
 	const toggleOption = (field: 'departmentIds' | 'functionIds', id: number) => {
+		setSelectionError(null);
 		setDraft((current) => ({
 			...current,
 			[field]: current[field].includes(id)
@@ -148,12 +154,80 @@ function Feedback() {
 	const startRequest = (selectedKind: FeedbackKind) => {
 		setDraft(emptyDraft);
 		setSubmitted(false);
+		setSubmissionSent(false);
+		setSubmissionError(null);
+		setSelectionError(null);
 		setKind(selectedKind);
 	};
 
-	const submitForReview = (event: React.FormEvent<HTMLFormElement>) => {
+	const submitForReview = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setSubmitted(true);
+		setSubmissionError(null);
+
+		if (kind !== 'suggest') {
+			setSubmissionSent(false);
+			setSubmitted(true);
+			return;
+		}
+
+		if (!draft.departmentIds.length || !draft.functionIds.length) {
+			setSelectionError(
+				'Select at least one department and one function for this resource.',
+			);
+			return;
+		}
+		if (
+			!draft.resourceName.trim() ||
+			!draft.description.trim() ||
+			!draft.resourceTypeId ||
+			!draft.reporterName.trim() ||
+			!draft.reporterEmail.trim()
+		) {
+			setSubmissionError('Complete all required fields before submitting.');
+			return;
+		}
+
+		setSelectionError(null);
+		const resourceUrl = draft.resourceUrl.trim();
+		try {
+			const parsedUrl = new URL(resourceUrl);
+			if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+				throw new Error('Use a resource link that starts with http:// or https://.');
+			}
+		} catch (error) {
+			setSubmissionError(
+				error instanceof Error && error.message.startsWith('Use a resource link')
+					? error.message
+					: 'Enter a valid resource link starting with http:// or https://.',
+			);
+			return;
+		}
+
+		setIsSubmitting(true);
+		try {
+			await createResourceSubmissionService({
+				name: draft.resourceName.trim(),
+				description: draft.description.trim(),
+				url: resourceUrl,
+				resource_type: Number(draft.resourceTypeId),
+				departments: draft.departmentIds,
+				functions: draft.functionIds,
+				submitter_name: draft.reporterName.trim(),
+				contact_email: draft.reporterEmail.trim(),
+			});
+			setSubmissionSent(true);
+			setSubmitted(true);
+		} catch (error) {
+			setSubmissionError(
+				error instanceof TypeError
+					? 'We couldn’t connect to the submission service. Check your connection and try again.'
+					: error instanceof Error
+						? error.message
+						: 'We couldn’t submit this resource suggestion. Please try again.',
+			);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	const selectedKind = feedbackKinds.find((item) => item.id === kind);
@@ -238,12 +312,14 @@ function Feedback() {
 					>
 						<BadgeCheck size={36} className="mx-auto mb-3 text-[#c8102e]" />
 						<h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-							Your request is ready for review
+							{submissionSent
+								? 'Resource suggestion submitted'
+								: 'Your request is ready for review'}
 						</h2>
 						<p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-							The form is complete, but it has not been submitted or stored. Once the
-							backend review endpoint is connected, this action will send it to the
-							review team.
+							{submissionSent
+								? 'Your suggestion was sent to the review team. Thank you for helping keep the resource repository up to date.'
+								: 'This request type is not connected to the review service yet, so it has not been submitted or stored.'}
 						</p>
 						<div className="mt-5 flex flex-wrap justify-center gap-3">
 							<button
@@ -259,6 +335,7 @@ function Feedback() {
 									setKind(null);
 									setSubmitted(false);
 									setDraft(emptyDraft);
+									setSubmissionSent(false);
 								}}
 								className="rounded-md bg-[#c8102e] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#a80d26]"
 							>
@@ -286,7 +363,24 @@ function Feedback() {
 							</p>
 						</div>
 
-						<form onSubmit={submitForReview} className="space-y-5">
+						<form
+							onSubmit={submitForReview}
+							onChange={() => {
+								if (submissionError) setSubmissionError(null);
+							}}
+							className="space-y-5"
+						>
+							{submissionError && (
+								<div
+									className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400"
+									role="alert"
+									aria-live="polite"
+								>
+									<CircleAlert size={17} className="mt-0.5 shrink-0" />
+									<p>{submissionError}</p>
+								</div>
+							)}
+
 							{kind === 'suggest' ? (
 								<>
 									<label className="block">
@@ -295,7 +389,7 @@ function Feedback() {
 										</span>
 										<input
 											required
-											maxLength={160}
+											maxLength={200}
 											value={draft.resourceName}
 											onChange={(event) =>
 												setDraft({ ...draft, resourceName: event.target.value })
@@ -311,7 +405,6 @@ function Feedback() {
 										</span>
 										<textarea
 											required
-											maxLength={1000}
 											rows={4}
 											value={draft.description}
 											onChange={(event) =>
@@ -352,7 +445,7 @@ function Feedback() {
 
 										<label className="block">
 											<span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
-												Resource link
+												Resource link *
 											</span>
 											<span className="relative block">
 												<LinkIcon
@@ -361,6 +454,8 @@ function Feedback() {
 												/>
 												<input
 													type="url"
+													required
+													pattern="https?://.+"
 													maxLength={2048}
 													value={draft.resourceUrl}
 													onChange={(event) =>
@@ -379,7 +474,7 @@ function Feedback() {
 									<div className="grid gap-5 sm:grid-cols-2">
 										<fieldset>
 											<legend className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-												Related departments
+												Related departments *
 											</legend>
 											<div className="max-h-40 space-y-2 overflow-y-auto rounded-md border border-slate-200 p-3 dark:border-slate-700">
 												{loadingOptions ? (
@@ -410,7 +505,7 @@ function Feedback() {
 
 										<fieldset>
 											<legend className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-												Related functions
+												Related functions *
 											</legend>
 											<div className="max-h-40 space-y-2 overflow-y-auto rounded-md border border-slate-200 p-3 dark:border-slate-700">
 												{loadingOptions ? (
@@ -439,6 +534,11 @@ function Feedback() {
 											</div>
 										</fieldset>
 									</div>
+									{selectionError && (
+										<p className="text-sm text-red-700" role="alert">
+											{selectionError}
+										</p>
+									)}
 								</>
 							) : (
 								<>
@@ -448,7 +548,7 @@ function Feedback() {
 										</span>
 										<input
 											required
-											maxLength={160}
+											maxLength={200}
 											value={draft.resourceName}
 											onChange={(event) =>
 												setDraft({ ...draft, resourceName: event.target.value })
@@ -518,10 +618,11 @@ function Feedback() {
 							<div className="grid gap-5 border-t border-slate-200 pt-5 dark:border-slate-700 sm:grid-cols-2">
 								<label className="block">
 									<span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
-										Your name
+										Your name {kind === 'suggest' && '*'}
 									</span>
 									<input
-										maxLength={120}
+										required={kind === 'suggest'}
+										maxLength={150}
 										autoComplete="name"
 										value={draft.reporterName}
 										onChange={(event) =>
@@ -532,10 +633,11 @@ function Feedback() {
 								</label>
 								<label className="block">
 									<span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
-										Contact email
+										Contact email {kind === 'suggest' && '*'}
 									</span>
 									<input
 										type="email"
+										required={kind === 'suggest'}
 										maxLength={254}
 										autoComplete="email"
 										value={draft.reporterEmail}
@@ -557,10 +659,20 @@ function Feedback() {
 								</button>
 								<button
 									type="submit"
+									disabled={isSubmitting || (kind === 'suggest' && loadingOptions)}
 									className="inline-flex items-center gap-2 rounded-md bg-[#c8102e] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[#a80d26]"
 								>
-									Continue for review
-									<ArrowRight size={16} />
+									{isSubmitting ? (
+										<>
+											<LoaderCircle size={16} className="animate-spin" />
+											Submitting...
+										</>
+									) : (
+										<>
+											{kind === 'suggest' ? 'Submit suggestion' : 'Preview request'}
+											<ArrowRight size={16} />
+										</>
+									)}
 								</button>
 							</div>
 						</form>

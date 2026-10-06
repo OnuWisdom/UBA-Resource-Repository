@@ -11,6 +11,7 @@ import Departments from './pages/Department';
 import ResourceTypes from './pages/Resources';
 import EntityDetail from './pages/EntityDetail';
 import Feedback from './pages/Feedback';
+import ResourceDetail from './pages/ResourceDetail';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 					<Route path="/department" element={<Departments />} />
 					<Route path="/resources" element={<ResourceTypes />} />
 					<Route path="/feedback" element={<Feedback />} />
+					<Route path="/resource/:slug" element={<ResourceDetail />} />
 					<Route path="/:type/:slug" element={<EntityDetail />} />
 				</Route>
 			</Route>

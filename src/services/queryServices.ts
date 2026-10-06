@@ -20,6 +20,22 @@ export interface ResourceSearchResult {
 	updated_at: string;
 }
 
+function parseResourceList(payload: unknown): ResourceSearchResult[] {
+	if (Array.isArray(payload)) {
+		return payload as ResourceSearchResult[];
+	}
+
+	if (
+		payload &&
+		typeof payload === 'object' &&
+		Array.isArray((payload as { results?: unknown }).results)
+	) {
+		return (payload as { results: ResourceSearchResult[] }).results;
+	}
+
+	throw new Error('The resource service returned an unsupported response.');
+}
+
 export async function getDepartmentService() {
 	const response = await fetch(`${BASE_URL}/api/resources/departments/`);
 
@@ -51,6 +67,16 @@ export async function getResourceService() {
 	}
 
 	return await response.json();
+}
+
+export async function getResourcesService(): Promise<ResourceSearchResult[]> {
+	const response = await fetch(`${BASE_URL}/api/resources/`);
+
+	if (!response.ok) {
+		throw new Error('Unable to load resources.');
+	}
+
+	return parseResourceList(await response.json());
 }
 
 export async function getDepartmentBySlugService(slug: string) {

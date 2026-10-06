@@ -1,34 +1,58 @@
+import { ArrowRight, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { ResourceSearchResult } from '../services/queryServices';
 
 interface CardProps {
-	title: string;
-	subtitle: string;
-	body: string;
-	linkTo: string;
-	dept: string;
-	role: string;
+	resource: ResourceSearchResult;
 }
 
-function Card({ title, subtitle, body, dept, role, linkTo }: CardProps) {
+function Card({ resource }: CardProps) {
+	const resourceType = resource.resource_types?.[0]?.name ?? 'Resource';
+	const department = resource.departments?.[0]?.name ?? 'Shared resource';
+	const functions = resource.functions ?? [];
+
 	return (
-		<div className="bg-white border border-slate-200 transition-all duration-800 hover:-translate-y-1 hover:border-[#c8102e]/50 hover:shadow-lg rounded-lg shadow-sm p-6">
-			<h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-			<p className="text-sm text-gray-500 mb-3">{subtitle}</p>
-			<p className="text-gray-600 text-sm mb-4">{body}</p>
-			<p>
-				<span className="text-[#c8102e] font-medium">{dept}</span>{' '}
-				<span className="text-xs bg-slate-100 rounded-xl px-2 py-1">{role}</span>
+		<article className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#c8102e]/50 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
+			<div className="mb-3 flex items-start gap-3">
+				<div className="rounded-md bg-red-50 p-2 text-[#c8102e] dark:bg-red-950/50">
+					<FileText size={19} />
+				</div>
+				<div className="min-w-0">
+					<h2 className="text-lg font-semibold leading-tight text-gray-900 dark:text-slate-100">
+						{resource.name}
+					</h2>
+					<p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">
+						{resourceType}
+					</p>
+				</div>
+			</div>
+
+			<p className="mb-4 flex-1 text-sm leading-relaxed text-gray-600 dark:text-slate-300">
+				{resource.description || 'No description has been added for this resource yet.'}
 			</p>
-			<div className="flex justify-around border-t border-gray-200 pt-2 mt-4">
-				<span className="text-sm">3 User Groups</span>
+
+			<div className="mb-4 flex flex-wrap items-center gap-2">
+				<span className="text-xs font-medium text-[#c8102e]">{department}</span>
+				{functions.slice(0, 2).map((func) => (
+					<span
+						key={func.id}
+						className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+					>
+						{func.name}
+					</span>
+				))}
+			</div>
+
+			<div className="mt-auto flex items-center justify-end border-t border-slate-200 pt-3 dark:border-slate-700">
 				<Link
-					to={linkTo}
-					className="text-[#c8102e] font-bold text-md hover:underline "
+					to={`/resource/${resource.slug}`}
+					state={{ resource }}
+					className="inline-flex items-center gap-1 text-sm font-semibold text-[#c8102e] hover:underline"
 				>
-					View details &rarr;
+					View details <ArrowRight size={14} />
 				</Link>
 			</div>
-		</div>
+		</article>
 	);
 }
 

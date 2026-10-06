@@ -136,7 +136,7 @@ export async function getResourcesService(): Promise<ResourceSearchResult[]> {
 
 export async function createResourceSubmissionService(
 	payload: ResourceSubmissionPayload,
-): Promise<void> {
+): Promise<number | null> {
 	const token = sessionStorage.getItem('token');
 	if (!token) {
 		throw new Error(
@@ -184,6 +184,24 @@ export async function createResourceSubmissionService(
 			`We couldn’t submit this resource suggestion (HTTP ${response.status}). Please try again.`,
 		);
 	}
+
+	const responseText = await response.text();
+	if (!responseText) return null;
+
+	try {
+		const result: unknown = JSON.parse(responseText);
+		if (
+			result &&
+			typeof result === 'object' &&
+			typeof (result as Record<string, unknown>).id === 'number'
+		) {
+			return (result as Record<string, number>).id;
+		}
+	} catch {
+		return null;
+	}
+
+	return null;
 }
 
 export async function getMySubmissionsService(): Promise<ResourceSubmission[]> {

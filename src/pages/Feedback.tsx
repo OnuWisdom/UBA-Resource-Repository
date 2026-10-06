@@ -110,6 +110,9 @@ function Feedback() {
 	const [loadingOptions, setLoadingOptions] = useState(true);
 	const [optionsError, setOptionsError] = useState<string | null>(null);
 	const [mySubmissions, setMySubmissions] = useState<ResourceSubmission[]>([]);
+	const [delayedSubmissions, setDelayedSubmissions] = useState<
+		Array<{ id: number; showAt: number }>
+	>([]);
 	const [loadingSubmissions, setLoadingSubmissions] = useState(true);
 	const [submissionsError, setSubmissionsError] = useState<string | null>(null);
 
@@ -119,16 +122,32 @@ function Feedback() {
 		try {
 			const submissions = await getMySubmissionsService();
 			setMySubmissions(submissions);
+			return submissions;
 		} catch (error) {
 			setSubmissionsError(
 				error instanceof Error
 					? error.message
 					: 'Unable to load your submissions.',
 			);
+			return null;
 		} finally {
 			setLoadingSubmissions(false);
 		}
 	}, []);
+
+	useEffect(() => {
+		if (delayedSubmissions.length === 0) return;
+		const nextShowAt = Math.min(...delayedSubmissions.map(({ showAt }) => showAt));
+		const timeout = window.setTimeout(() => {
+			const now = Date.now();
+			setDelayedSubmissions((current) =>
+				current.filter(({ showAt }) => showAt > now),
+			);
+			void refreshSubmissions();
+		}, Math.max(0, nextShowAt - Date.now()));
+
+		return () => window.clearTimeout(timeout);
+	}, [delayedSubmissions, refreshSubmissions]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -254,7 +273,9 @@ function Feedback() {
 
 		setIsSubmitting(true);
 		try {
-			await createResourceSubmissionService({
+			const previousSubmissionIds = new Set(mySubmissions.map(({ id }) => id));
+			const showAt = Date.now() + 10_000;
+			const createdSubmissionId = await createResourceSubmissionService({
 				name: draft.resourceName.trim(),
 				description: draft.description.trim(),
 				url: resourceUrl,
@@ -266,7 +287,29 @@ function Feedback() {
 			});
 			setSubmissionSent(true);
 			setSubmitted(true);
-			await refreshSubmissions();
+			if (createdSubmissionId !== null) {
+				setDelayedSubmissions((current) => [
+					...current.filter(({ id }) => id !== createdSubmissionId),
+					{ id: createdSubmissionId, showAt },
+				]);
+			}
+			const refreshedSubmissions = await refreshSubmissions();
+			if (createdSubmissionId === null && refreshedSubmissions) {
+				const matchingNewSubmission = refreshedSubmissions
+					.filter(
+						(submission) =>
+							!previousSubmissionIds.has(submission.id) &&
+							submission.name === draft.resourceName.trim(),
+					)
+					.sort((first, second) => second.id - first.id)[0];
+
+				if (matchingNewSubmission) {
+					setDelayedSubmissions((current) => [
+						...current.filter(({ id }) => id !== matchingNewSubmission.id),
+						{ id: matchingNewSubmission.id, showAt },
+					]);
+				}
+			}
 		} catch (error) {
 			setSubmissionError(
 				error instanceof TypeError
@@ -760,6 +803,13 @@ function Feedback() {
 						</button>
 					</div>
 
+					{delayedSubmissions.length > 0 && (
+						<p className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+							Your new resource suggestion is awaiting review and will appear in
+							this list shortly.
+						</p>
+					)}
+
 					{loadingSubmissions && (
 						<div
 							className="flex min-h-28 items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400"
@@ -789,7 +839,12 @@ function Feedback() {
 						</div>
 					)}
 
-					{!loadingSubmissions && !submissionsError && mySubmissions.length === 0 && (
+					{!loadingSubmissions &&
+						!submissionsError &&
+						mySubmissions.filter(
+							(submission) =>
+								!delayedSubmissions.some(({ id }) => id === submission.id),
+						).length === 0 && (
 						<div className="rounded-lg border border-dashed border-slate-300 bg-white p-7 text-center dark:border-slate-700 dark:bg-slate-900">
 							<BookPlus size={24} className="mx-auto mb-2 text-slate-400" />
 							<p className="font-medium text-slate-800 dark:text-slate-200">
@@ -803,7 +858,12 @@ function Feedback() {
 
 					{!loadingSubmissions && !submissionsError && mySubmissions.length > 0 && (
 						<div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-							{mySubmissions.map((submission) => {
+							{mySubmissions
+								.filter(
+									(submission) =>
+										!delayedSubmissions.some(({ id }) => id === submission.id),
+								)
+								.map((submission) => {
 								const resourceTypeName = getCategoryName(
 									submission.resource_type,
 									resourceTypes,
@@ -881,7 +941,7 @@ function Feedback() {
 										</div>
 									</article>
 								);
-							})}
+								})}
 						</div>
 					)}
 				</section>

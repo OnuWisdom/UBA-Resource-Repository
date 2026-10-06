@@ -31,6 +31,18 @@ export interface ResourceSubmissionPayload {
 	contact_email: string;
 }
 
+export type SubmissionCategory = number | ResourceSearchRef;
+
+export interface ResourceSubmission
+	extends Omit<ResourceSubmissionPayload, 'resource_type' | 'departments' | 'functions'> {
+	id: number;
+	resource_type: SubmissionCategory;
+	departments: SubmissionCategory[];
+	functions: SubmissionCategory[];
+	created_at?: string;
+	status?: string;
+}
+
 function getSubmissionError(payload: unknown): string | undefined {
 	if (!payload || typeof payload !== 'object') return undefined;
 	const body = payload as Record<string, unknown>;
@@ -172,6 +184,47 @@ export async function createResourceSubmissionService(
 			`We couldn’t submit this resource suggestion (HTTP ${response.status}). Please try again.`,
 		);
 	}
+}
+
+export async function getMySubmissionsService(): Promise<ResourceSubmission[]> {
+	const token = sessionStorage.getItem('token');
+	if (!token) {
+		throw new Error('Your session has expired. Please sign in again.');
+	}
+
+	const response = await fetch(`${BASE_URL}/api/submissions/`, {
+		headers: {
+			Authorization: `Token ${token}`,
+		},
+	});
+
+	if (!response.ok) {
+		const responseText = await response.text();
+		let message: string | undefined;
+		if (responseText) {
+			try {
+				message = getSubmissionError(JSON.parse(responseText) as unknown);
+			} catch {
+				message = undefined;
+			}
+		}
+
+		if (message) throw new Error(message);
+		if (response.status === 401) {
+			throw new Error('Your session has expired or could not be verified. Please sign in again.');
+		}
+		if (response.status === 403) {
+			throw new Error('You do not have permission to view these submissions.');
+		}
+		throw new Error(`Unable to load your submissions (HTTP ${response.status}).`);
+	}
+
+	const data: unknown = await response.json();
+	if (!Array.isArray(data)) {
+		throw new Error('The submissions service returned an unsupported response.');
+	}
+
+	return data as ResourceSubmission[];
 }
 
 export async function getDepartmentBySlugService(slug: string) {

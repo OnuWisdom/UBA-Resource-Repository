@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
 	ArrowLeft,
@@ -7,17 +7,22 @@ import {
 	BookPlus,
 	CircleAlert,
 	Clock3,
+	ExternalLink,
 	FilePenLine,
 	Link as LinkIcon,
 	LoaderCircle,
 	MessageSquareWarning,
+	RefreshCw,
 	Trash2,
 } from 'lucide-react';
 import {
 	createResourceSubmissionService,
 	getDepartmentService,
 	getFunctionService,
+	getMySubmissionsService,
 	getResourceService,
+	type ResourceSubmission,
+	type SubmissionCategory,
 } from '../services/queryServices';
 
 type FeedbackKind = 'suggest' | 'outdated' | 'inactive' | 'updated';
@@ -104,6 +109,50 @@ function Feedback() {
 	const [resourceTypes, setResourceTypes] = useState<FeedbackOption[]>([]);
 	const [loadingOptions, setLoadingOptions] = useState(true);
 	const [optionsError, setOptionsError] = useState<string | null>(null);
+	const [mySubmissions, setMySubmissions] = useState<ResourceSubmission[]>([]);
+	const [loadingSubmissions, setLoadingSubmissions] = useState(true);
+	const [submissionsError, setSubmissionsError] = useState<string | null>(null);
+
+	const refreshSubmissions = useCallback(async () => {
+		setLoadingSubmissions(true);
+		setSubmissionsError(null);
+		try {
+			const submissions = await getMySubmissionsService();
+			setMySubmissions(submissions);
+		} catch (error) {
+			setSubmissionsError(
+				error instanceof Error
+					? error.message
+					: 'Unable to load your submissions.',
+			);
+		} finally {
+			setLoadingSubmissions(false);
+		}
+	}, []);
+
+	useEffect(() => {
+		let cancelled = false;
+		getMySubmissionsService()
+			.then((submissions) => {
+				if (!cancelled) setMySubmissions(submissions);
+			})
+			.catch((error: unknown) => {
+				if (!cancelled) {
+					setSubmissionsError(
+						error instanceof Error
+							? error.message
+							: 'Unable to load your submissions.',
+					);
+				}
+			})
+			.finally(() => {
+				if (!cancelled) setLoadingSubmissions(false);
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -217,6 +266,7 @@ function Feedback() {
 			});
 			setSubmissionSent(true);
 			setSubmitted(true);
+			await refreshSubmissions();
 		} catch (error) {
 			setSubmissionError(
 				error instanceof TypeError
@@ -231,6 +281,13 @@ function Feedback() {
 	};
 
 	const selectedKind = feedbackKinds.find((item) => item.id === kind);
+	const getCategoryName = (
+		category: SubmissionCategory,
+		options: FeedbackOption[],
+	) => {
+		if (typeof category !== 'number') return category.name;
+		return options.find((option) => option.id === category)?.name ?? `Category ${category}`;
+	};
 
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -678,6 +735,156 @@ function Feedback() {
 						</form>
 					</section>
 				)}
+
+				<section className="mt-10">
+					<div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+						<div>
+							<h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+								My submitted resources
+							</h2>
+							<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+								Resources you have sent for review.
+							</p>
+						</div>
+						<button
+							type="button"
+							onClick={() => void refreshSubmissions()}
+							disabled={loadingSubmissions}
+							className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+						>
+							<RefreshCw
+								size={15}
+								className={loadingSubmissions ? 'animate-spin' : ''}
+							/>
+							Refresh
+						</button>
+					</div>
+
+					{loadingSubmissions && (
+						<div
+							className="flex min-h-28 items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400"
+							role="status"
+						>
+							<LoaderCircle size={18} className="animate-spin text-[#c8102e]" />
+							Loading your submissions...
+						</div>
+					)}
+
+					{submissionsError && (
+						<div
+							className="flex items-start gap-3 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400"
+							role="alert"
+						>
+							<CircleAlert size={17} className="mt-0.5 shrink-0" />
+							<div className="flex-1">
+								<p>{submissionsError}</p>
+								<button
+									type="button"
+									onClick={() => void refreshSubmissions()}
+									className="mt-2 font-medium underline"
+								>
+									Try again
+								</button>
+							</div>
+						</div>
+					)}
+
+					{!loadingSubmissions && !submissionsError && mySubmissions.length === 0 && (
+						<div className="rounded-lg border border-dashed border-slate-300 bg-white p-7 text-center dark:border-slate-700 dark:bg-slate-900">
+							<BookPlus size={24} className="mx-auto mb-2 text-slate-400" />
+							<p className="font-medium text-slate-800 dark:text-slate-200">
+								You haven’t submitted any resources yet.
+							</p>
+							<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+								Your suggestions will appear here after they are submitted.
+							</p>
+						</div>
+					)}
+
+					{!loadingSubmissions && !submissionsError && mySubmissions.length > 0 && (
+						<div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+							{mySubmissions.map((submission) => {
+								const resourceTypeName = getCategoryName(
+									submission.resource_type,
+									resourceTypes,
+								);
+								const departmentNames = submission.departments.map((item) =>
+									getCategoryName(item, departments),
+								);
+								const functionNames = submission.functions.map((item) =>
+									getCategoryName(item, functions),
+								);
+								const submittedDate = submission.created_at
+									? new Date(submission.created_at)
+									: null;
+
+								return (
+									<article
+										key={submission.id}
+										className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+									>
+										<div className="flex items-start justify-between gap-3">
+											<div>
+												<h3 className="font-semibold text-slate-900 dark:text-slate-100">
+													{submission.name}
+												</h3>
+												<p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+													{resourceTypeName}
+												</p>
+											</div>
+											<span className="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium capitalize text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
+												{submission.status || 'Submitted'}
+											</span>
+										</div>
+
+										<p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+											{submission.description}
+										</p>
+
+										{(departmentNames.length > 0 || functionNames.length > 0) && (
+											<div className="mt-4 flex flex-wrap gap-2">
+												{departmentNames.map((name) => (
+													<span
+														key={`department-${name}`}
+														className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-[#c8102e] dark:bg-red-950/50"
+													>
+														{name}
+													</span>
+												))}
+												{functionNames.map((name) => (
+													<span
+														key={`function-${name}`}
+														className="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+													>
+														{name}
+													</span>
+												))}
+											</div>
+										)}
+
+										<div className="mt-auto flex flex-wrap items-end justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
+											<p className="text-xs text-slate-500 dark:text-slate-400">
+												{submittedDate && !Number.isNaN(submittedDate.getTime())
+													? `Submitted ${submittedDate.toLocaleDateString()}`
+													: 'Submitted'}
+											</p>
+											{submission.url && (
+												<a
+													href={submission.url}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+												>
+													Open resource <ExternalLink size={14} />
+												</a>
+											)}
+										</div>
+									</article>
+								);
+							})}
+						</div>
+					)}
+				</section>
 			</main>
 		</div>
 	);

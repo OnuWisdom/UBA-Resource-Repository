@@ -45,7 +45,7 @@ function Far() {
 	}, []);
 
 	return (
-		<div className="flex flex-col">
+		<div id="frequently-used-resources" className="flex flex-col">
 			<h1 className="bg-slate-50 p-4 text-center text-xl font-bold dark:bg-slate-900 dark:text-slate-100">
 				Frequently Used Resources
 			</h1>

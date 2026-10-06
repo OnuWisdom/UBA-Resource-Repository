@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
+	ArrowLeft,
 	ArrowRight,
 	Building2,
 	CircleAlert,
@@ -77,8 +78,11 @@ function ResourceDetail() {
 							Home
 						</Link>
 						<span className="mx-2">›</span>
-						<Link to="/resources" className="hover:text-[#c8102e]">
-							Resources
+						<Link
+							to="/#frequently-used-resources"
+							className="hover:text-[#c8102e]"
+						>
+							Frequently Used Resources
 						</Link>
 						<span className="mx-2">›</span>
 						<span className="font-medium text-slate-700 dark:text-slate-300">
@@ -97,6 +101,14 @@ function ResourceDetail() {
 			</div>
 
 			<main className="mx-auto max-w-6xl px-6 py-8">
+				<Link
+					to="/#frequently-used-resources"
+					className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#c8102e] hover:underline"
+				>
+					<ArrowLeft size={16} />
+					Back to frequently used resources
+				</Link>
+
 				{loading && (
 					<div className="flex min-h-40 items-center justify-center gap-2 text-sm text-slate-500" role="status">
 						<LoaderCircle size={18} className="animate-spin text-[#c8102e]" />

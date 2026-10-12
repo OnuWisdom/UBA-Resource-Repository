@@ -8,7 +8,7 @@ import {
 	Phone,
 	Mail,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function About() {
 	const navigate = useNavigate();
@@ -136,10 +136,10 @@ function About() {
 								</p>
 
 								<a
-									href="#"
+								href="mailto:ITcare@ubagroup.com"
 									className="text-sm text-red-500 dark:text-red-400 hover:underline"
 								>
-									Visit IT Service Desk →
+								Report to IT →
 								</a>
 							</div>
 						</div>
@@ -158,12 +158,12 @@ function About() {
 									For questions about HR systems, leave, or employee services.
 								</p>
 
-								<a
-									href="#"
+								<Link
+									to="/department/human-resources"
 									className="text-sm text-red-500 dark:text-red-400 hover:underline"
 								>
 									Browse HR Resources →
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>

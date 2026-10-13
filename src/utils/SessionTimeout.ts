@@ -17,8 +17,8 @@ function SessionTimeout() {
 					sessionStorage.removeItem('token');
 					navigate('/login', { replace: true });
 				},
-				1 * 60 * 1000,
-				// 60 * 60 * 1000,
+				// 1 * 60 * 1000,
+				60 * 60 * 1000,
 			);
 		};
 

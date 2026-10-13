@@ -79,6 +79,8 @@ function Header() {
 						const token = sessionStorage.getItem('token');
 						if (token) {
 							sessionStorage.removeItem('token');
+							sessionStorage.removeItem('display_name');
+							sessionStorage.removeItem('welcome_modal_dismissed');
 							// alert('Logout Successful');
 							navigate('/login', { replace: true });
 						}

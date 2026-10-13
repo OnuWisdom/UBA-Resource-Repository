@@ -15,6 +15,8 @@ function SessionTimeout() {
 			idleTimer = setTimeout(
 				() => {
 					sessionStorage.removeItem('token');
+					sessionStorage.removeItem('display_name');
+					sessionStorage.removeItem('welcome_modal_dismissed');
 					navigate('/login', { replace: true });
 				},
 				// 1 * 60 * 1000,

@@ -3,6 +3,14 @@ import { CircleAlert, Eye, EyeOff, LoaderCircle } from 'lucide-react';
 import { loginService, tokenService } from '../services/loginService';
 import { useNavigate } from 'react-router-dom';
 
+function getDisplayName(username: string) {
+	const usernamePart = username.trim().split('@')[0] ?? '';
+	const firstName = usernamePart.split(/[._\-\s]+/)[0] ?? '';
+	return firstName
+		? `${firstName.charAt(0).toLocaleUpperCase()}${firstName.slice(1).toLocaleLowerCase()}`
+		: '';
+}
+
 export default function Login() {
 	const [loginData, setLoginData] = useState({
 		username: '',
@@ -100,6 +108,9 @@ export default function Login() {
 				otp,
 			});
 
+			const displayName = getDisplayName(loginData.username);
+			sessionStorage.removeItem('welcome_modal_dismissed');
+			if (displayName) sessionStorage.setItem('display_name', displayName);
 			sessionStorage.setItem('token', data.token);
 			sessionStorage.removeItem('pending_token');
 			navigate('/', { replace: true });

@@ -1,12 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Search as SearchIcon, Sparkles } from 'lucide-react';
+import {
+	ArrowRight,
+	Compass,
+	Search as SearchIcon,
+	Sparkles,
+	UsersRound,
+	type LucideIcon,
+} from 'lucide-react';
 
-const popularSearches = ['Leave', 'Expenses', 'Password reset', 'System access'];
+const popularSearches = [
+	'Leave',
+	'Expenses',
+	'Password reset',
+	'System access',
+];
+
+const heroHighlights: Array<{
+	eyebrow: string;
+	title: string;
+	description: string;
+	icon: LucideIcon;
+}> = [
+	{
+		eyebrow: 'Everything you need',
+		title: 'All in one place.',
+		description: 'Tools, guides, and services, gathered for your work.',
+		icon: SearchIcon,
+	},
+	{
+		eyebrow: 'Made for your work',
+		title: 'Find your people.',
+		description: 'Browse resources by department or business function.',
+		icon: UsersRound,
+	},
+	{
+		eyebrow: 'Your next step',
+		title: 'Get there quicker.',
+		description: 'Search in plain language and get to the right resource.',
+		icon: Compass,
+	},
+];
 
 function Hero() {
 	const [search, setSearch] = useState('');
+	const [activeHighlight, setActiveHighlight] = useState(0);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		const interval = window.setInterval(() => {
+			setActiveHighlight((current) => (current + 1) % heroHighlights.length);
+		}, 5000);
+
+		return () => window.clearInterval(interval);
+	}, []);
 
 	const openSearch = (query: string) => {
 		const trimmedQuery = query.trim();
@@ -81,9 +128,7 @@ function Hero() {
 					</form>
 
 					<div className="mt-5 flex flex-wrap items-center gap-2">
-						<span className="mr-1 text-xs font-medium text-white/65">
-							Popular:
-						</span>
+						<span className="mr-1 text-xs font-medium text-white/65">Popular:</span>
 						{popularSearches.map((term) => (
 							<button
 								key={term}
@@ -97,26 +142,56 @@ function Hero() {
 					</div>
 				</div>
 
-				<div className="hidden lg:block" aria-hidden="true">
+				<div
+					className="hidden lg:block"
+					role="region"
+					aria-roledescription="carousel"
+					aria-label="Resource hub highlights"
+				>
 					<div className="relative mx-auto aspect-square max-w-[17rem]">
-						<div className="absolute inset-0 rounded-[2.5rem] border border-white/10 bg-white/[0.04] rotate-6" />
-						<div className="absolute inset-4 rounded-[2rem] border border-white/10 bg-white/[0.06] -rotate-3" />
-						<div className="absolute inset-8 flex flex-col justify-between rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-6 shadow-2xl backdrop-blur-sm">
-							<div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#a41424] shadow-lg">
-								<SearchIcon size={23} />
-							</div>
-							<div>
-								<p className="text-sm font-medium text-white/65">Everything you need</p>
-								<p className="mt-1 text-2xl font-semibold leading-tight">
-									All in one
-									<br />
-									place.
-								</p>
-							</div>
-							<div className="flex gap-1.5">
-								<span className="h-1.5 w-10 rounded-full bg-white/80" />
-								<span className="h-1.5 w-5 rounded-full bg-white/30" />
-								<span className="h-1.5 w-5 rounded-full bg-white/30" />
+						<div className="absolute inset-0 rotate-6 rounded-[2.5rem] border border-white/10 bg-white/[0.04]" />
+						<div className="absolute inset-4 -rotate-3 rounded-[2rem] border border-white/10 bg-white/[0.06]" />
+						<div
+							className="absolute inset-8 flex gap-1.5 flex-col justify-between rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-6 shadow-2xl backdrop-blur-sm"
+							role="group"
+							aria-roledescription="slide"
+							aria-label={`${activeHighlight + 1} of ${heroHighlights.length}: ${heroHighlights[activeHighlight].eyebrow}`}
+						>
+							{(() => {
+								const highlight = heroHighlights[activeHighlight];
+								const HighlightIcon = highlight.icon;
+								return (
+									<>
+										<div className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-[#a41424] shadow-lg">
+											<HighlightIcon size={23} aria-hidden="true" />
+										</div>
+										<div
+											key={activeHighlight}
+											className="animate-fade-up"
+											aria-live="off"
+										>
+											<p className="text-sm font-medium text-white/65">
+												{highlight.eyebrow}
+											</p>
+											<p className="mt-1 text-2xl font-semibold leading-tight">
+												{highlight.title}
+											</p>
+											<p className="mt-2 text-xs leading-relaxed text-white/70">
+												{highlight.description}
+											</p>
+										</div>
+									</>
+								);
+							})()}
+							<div className="flex gap-1.5" aria-hidden="true">
+								{heroHighlights.map((highlight, index) => (
+									<span
+										key={highlight.eyebrow}
+										className={`h-1.5 rounded-full transition-all duration-500 ${
+											activeHighlight === index ? 'w-10 bg-white/80' : 'w-5 bg-white/30'
+										}`}
+									/>
+								))}
 							</div>
 						</div>
 					</div>

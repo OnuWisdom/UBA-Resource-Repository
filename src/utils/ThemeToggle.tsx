@@ -7,8 +7,9 @@ function ThemeToggle() {
 	return (
 		<button
 			onClick={toggleTheme}
-			aria-label="Toggle dark mode"
-			className="p-2 rounded-md hover:bg-slate-700/50 dark:hover:bg-slate-600/50 transition-colors"
+			aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+			title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+			className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-300 dark:hover:bg-slate-800"
 		>
 			{theme === 'dark' ? (
 				<Sun size={18} className="text-yellow-300" />

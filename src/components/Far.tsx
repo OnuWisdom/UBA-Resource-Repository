@@ -45,15 +45,24 @@ function Far() {
 	}, []);
 
 	return (
-		<div id="frequently-used-resources" className="flex flex-col">
-			<h1 className="bg-slate-50 p-4 text-center text-xl font-bold dark:bg-slate-900 dark:text-slate-100">
-				Frequently Used Resources
-			</h1>
-			<p className="bg-slate-50 pb-2 text-center text-sm text-slate-500 dark:bg-slate-900 dark:text-slate-400">
-				Showing active resources from the repository. Usage-based ranking is not
-				available yet.
-			</p>
-			<div className="mx-auto my-10 w-full max-w-7xl px-6">
+		<section
+			id="frequently-used-resources"
+			className="bg-slate-50 py-14 dark:bg-slate-950 sm:py-16"
+		>
+			<div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10">
+				<div className="mb-7 flex flex-col justify-between gap-2 sm:mb-8 sm:flex-row sm:items-end">
+					<div>
+						<p className="text-xs font-bold uppercase tracking-[0.16em] text-[#c8102e]">
+							A good place to start
+						</p>
+						<h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+							Featured resources
+						</h2>
+						<p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500 dark:text-slate-400 sm:text-base">
+							Explore active tools and services available across UBA.
+						</p>
+					</div>
+				</div>
 				{loading && (
 					<div
 						className="flex min-h-32 items-center justify-center gap-2 text-sm text-slate-500"
@@ -92,7 +101,7 @@ function Far() {
 					</div>
 				)}
 			</div>
-		</div>
+		</section>
 	);
 }
 

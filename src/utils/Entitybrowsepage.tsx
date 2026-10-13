@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { FileText, CircleAlert } from 'lucide-react';
 import EntityCard from '../components/EntityCard';
@@ -65,47 +65,69 @@ function EntityBrowsePage({
 
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-			<div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-				<div className="max-w-6xl mx-auto px-6 py-6">
-					<div className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-						<span
-							className="hover:text-[#c8102e] dark:hover:text-[#e8495f] cursor-pointer"
-							onClick={() => navigate('/')}
-						>
+			<div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+				<div className="mx-auto max-w-7xl px-5 py-7 sm:px-8 lg:px-10">
+					<div className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+						<Link to="/" className="transition hover:text-[#c8102e]">
 							Home
-						</span>
-						<span className="mx-2">›</span>
-						<span className="text-slate-700 dark:text-slate-300 font-medium">
+						</Link>
+						<span className="mx-2 text-slate-300 dark:text-slate-600">/</span>
+						<span className="font-medium text-slate-700 dark:text-slate-200">
 							{breadcrumbLabel}
 						</span>
 					</div>
-					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+					<p className="text-xs font-bold uppercase tracking-[0.16em] text-[#c8102e]">
+						Explore the directory
+					</p>
+					<h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
 						{pageTitle}
 					</h1>
-					<p className="text-slate-500 dark:text-slate-400 mt-1">{pageSubtitle}</p>
+					<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 sm:text-base">
+						{pageSubtitle}
+					</p>
 				</div>
 			</div>
 
-			<div className="max-w-6xl mx-auto px-6 py-8">
+			<div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10">
 				{loading && (
-					<p className="text-sm text-slate-500 dark:text-slate-400">Loading...</p>
+					<div
+						className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
+						role="status"
+						aria-label={`Loading ${breadcrumbLabel.toLowerCase()}`}
+					>
+						{Array.from({ length: 6 }, (_, index) => (
+							<div
+								key={index}
+								className="h-48 animate-pulse rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+							>
+								<div className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-slate-800" />
+								<div className="mt-5 h-4 w-2/3 rounded bg-slate-100 dark:bg-slate-800" />
+								<div className="mt-3 h-3 w-full rounded bg-slate-100 dark:bg-slate-800" />
+							</div>
+						))}
+					</div>
 				)}
 
 				{error && (
-					<div className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 p-3 rounded-md text-sm">
+					<div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
 						<CircleAlert size={16} />
 						{error}
 					</div>
 				)}
 
 				{!loading && !error && items.length === 0 && (
-					<p className="text-sm text-slate-500 dark:text-slate-400">
-						Nothing to show yet.
-					</p>
+					<div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+						<p className="font-medium text-slate-800 dark:text-slate-100">
+							Nothing to show just yet
+						</p>
+						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+							There are no {breadcrumbLabel.toLowerCase()} available to browse right now.
+						</p>
+					</div>
 				)}
 
 				{!loading && !error && items.length > 0 && (
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 						{items.map((item) => (
 							<EntityCard
 								key={item.id}

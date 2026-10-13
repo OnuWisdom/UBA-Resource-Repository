@@ -132,10 +132,12 @@ export default function Login() {
 		<>
 			{step === 'login' ? (
 				<form onSubmit={handleSubmit} noValidate>
-					<h1 className="text-[30px] font-normal text-black">Welcome Back</h1>
+					<h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-[30px]">
+						Welcome back
+					</h1>
 
-					<p className="text-[16px] text-black mt-1 mb-7">
-						Please login to your account
+					<p className="mb-7 mt-2 text-sm leading-relaxed text-slate-500 sm:text-base">
+						Sign in with your UBA account to continue.
 					</p>
 
 					{error && (
@@ -150,7 +152,9 @@ export default function Login() {
 					)}
 
 					<div className="mb-1">
-						<label className="block text-[18px] text-black mb-1">Username</label>
+						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+							Username
+						</label>
 
 						<input
 							type="text"
@@ -160,7 +164,7 @@ export default function Login() {
 							aria-invalid={Boolean(fieldErrors.username)}
 							aria-describedby={fieldErrors.username ? 'username-error' : undefined}
 							placeholder="Enter your username"
-							className="w-full h-12 bg-white border border-slate-300 rounded-md px-3 text-base text-slate-700 outline-none focus:ring-2 focus:ring-[#c8102e]/40 focus:border-[#c8102e] transition-colors"
+							className="h-12 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-[#c8102e] focus:ring-2 focus:ring-[#c8102e]/25"
 							onChange={handleChange}
 						/>
 						{fieldErrors.username && (
@@ -175,7 +179,9 @@ export default function Login() {
 					</div>
 
 					<div className="mb-1">
-						<label className="block text-[18px] text-black mb-1">Password</label>
+						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+							Password
+						</label>
 
 						<div className="relative">
 							<input
@@ -186,7 +192,7 @@ export default function Login() {
 								aria-invalid={Boolean(fieldErrors.password)}
 								aria-describedby={fieldErrors.password ? 'password-error' : undefined}
 								placeholder="Enter your password"
-								className="w-full h-12 bg-white border border-slate-300 rounded-md pl-3 pr-12 text-base text-slate-700 outline-none focus:ring-2 focus:ring-[#c8102e]/40 focus:border-[#c8102e] transition-colors"
+								className="h-12 w-full rounded-lg border border-slate-300 bg-white pl-3 pr-12 text-sm text-slate-800 outline-none transition focus:border-[#c8102e] focus:ring-2 focus:ring-[#c8102e]/25"
 								onChange={handleChange}
 							/>
 							<button
@@ -214,18 +220,9 @@ export default function Login() {
 						)}
 					</div>
 
-					<label className="flex items-center gap-1.5 text-[18px] text-black cursor-pointer">
-						<input
-							type="checkbox"
-							defaultChecked
-							className="w-4.5 h-4.5 accent-blue-600"
-						/>
-						Remember Me
-					</label>
-
 					<button
 						type="submit"
-						className="w-full h-12 mt-8 bg-[#d70900] hover:bg-[#c90500] text-white text-[18px] rounded-md transition disabled:cursor-not-allowed flex items-center justify-center gap-2"
+						className="mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#c8102e] text-sm font-semibold text-white transition hover:bg-[#a80d26] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
 						disabled={loading}
 						aria-busy={loading}
 					>
@@ -237,9 +234,11 @@ export default function Login() {
 				</form>
 			) : (
 				<form onSubmit={handleTokenValidation} noValidate>
-					<h1 className="text-[30px] font-normal text-black">Verify your sign-in</h1>
-					<p className="mb-7 mt-1 text-[16px] text-black">
-						Enter the 8-digit code from enthrust.
+					<h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-[30px]">
+						Verify your sign-in
+					</h1>
+					<p className="mb-7 mt-2 text-sm leading-relaxed text-slate-500 sm:text-base">
+						Enter the 8-digit code sent by Entrust.
 					</p>
 
 					{error && (
@@ -254,7 +253,9 @@ export default function Login() {
 					)}
 
 					<div className="mb-2">
-						<label className="block text-[18px] text-black mb-1">Token</label>
+						<label className="mb-1.5 block text-sm font-medium text-slate-700">
+							Verification code
+						</label>
 
 						<input
 							type="text"
@@ -267,7 +268,7 @@ export default function Login() {
 							aria-invalid={Boolean(fieldErrors.otp)}
 							aria-describedby={fieldErrors.otp ? 'token-error' : undefined}
 							placeholder="12345678"
-							className="w-full h-12 border border-[#b9c9dc] rounded-md px-3 text-[18px] placeholder:text-[#b8c8da] outline-none"
+							className="h-12 w-full rounded-lg border border-slate-300 px-3 text-base tracking-[0.2em] text-slate-800 outline-none transition placeholder:tracking-[0.2em] placeholder:text-slate-400 focus:border-[#c8102e] focus:ring-2 focus:ring-[#c8102e]/25"
 							onChange={(e) => {
 								setOtp(e.target.value);
 								setFieldErrors((prevErrors) => ({ ...prevErrors, otp: undefined }));
@@ -283,7 +284,7 @@ export default function Login() {
 
 					<button
 						type="submit"
-						className="w-full h-12 mt-16 bg-[#d70900] hover:bg-[#c90500] text-white text-[18px] rounded-md transition disabled:cursor-not-allowed flex items-center justify-center gap-2"
+						className="mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#c8102e] text-sm font-semibold text-white transition hover:bg-[#a80d26] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
 						disabled={loading}
 						aria-busy={loading}
 					>

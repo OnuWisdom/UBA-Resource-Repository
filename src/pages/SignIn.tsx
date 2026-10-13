@@ -4,68 +4,50 @@ import LoginHeader from '../components/LoginHeader';
 
 function SignIn() {
 	return (
-		<div className="relative min-h-screen bg-[url('/urr3.jpeg')] bg-cover bg-center">
-			<div className="absolute inset-0 bg-black/40"></div>
+		<div className="relative flex min-h-screen flex-col overflow-hidden bg-slate-950">
+			<div
+				className="absolute inset-0 bg-[url('/urr3.jpeg')] bg-cover bg-center"
+				aria-hidden="true"
+			/>
+			<div
+				className="absolute inset-0 bg-gradient-to-br from-slate-950/85 via-slate-950/55 to-[#6e101e]/70"
+				aria-hidden="true"
+			/>
 
-			<div className="absolute top-0 left-0 right-0 z-10 flex justify-around items-center p-4">
-				<LoginHeader />
-			</div>
+			<header className="relative z-10">
+				<div className="mx-auto max-w-7xl px-5 pt-5 sm:px-8 lg:px-10">
+					<LoginHeader />
+				</div>
+			</header>
 
-			<div className="relative z-10 min-h-screen flex items-center px-48">
-				<div className="w-full flex items-center justify-between">
-					<div className="w-1/2 text-left text-white">
-						<h1
-							className="animate-fade-up font-['Manrope'] text-5xl font-medium leading-[1.05] tracking-[-0.03em]"
-							style={{ animationDelay: '0.2s' }}
-						>
-							Stop Guessing,
+			<main className="relative z-10 flex flex-1 items-center">
+				<div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 py-10 sm:px-8 md:py-14 lg:grid-cols-[minmax(0,1fr)_26rem] lg:gap-16 lg:px-10">
+					<div className="max-w-2xl text-white">
+						<p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/75 sm:text-sm">
+							UBA Digital Resource Hub
+						</p>
+						<h1 className="font-['Manrope'] text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+							Spend less time
+							<br />
+							<span className="text-white/70">looking. Do more.</span>
 						</h1>
-
-						<h1
-							className="animate-fade-up font-['Manrope'] text-6xl font-extrabold leading-[1.05] tracking-[-0.04em]"
-							style={{ animationDelay: '0.5s' }}
-						>
-							Start Finding.
-						</h1>
-
-						<p
-							className="animate-fade-up mt-6 max-w-md font-['Manrope'] text-lg font-medium leading-relaxed text-white/75"
-							style={{ animationDelay: '0.8s' }}
-						>
-							Your one-stop destination for everything you need to navigate UBA's
-							digital resources.
+						<p className="mt-5 max-w-lg text-base leading-relaxed text-white/75 sm:text-lg">
+							Your trusted starting point for the tools, services, and guidance
+							that keep work moving.
 						</p>
 					</div>
 
-					<div className="w-full max-w-md bg-white/85 backdrop-blur-sm rounded-md px-8 py-9 shadow-2xl">
+					<div className="w-full rounded-2xl border border-white/40 bg-white/95 px-6 py-7 shadow-2xl shadow-black/25 backdrop-blur-xl sm:px-8 sm:py-9">
 						<Login />
 					</div>
 				</div>
-			</div>
+			</main>
 
-			<div className="absolute bottom-0 left-0 right-0 z-10 flex justify-between items-center p-4">
+			<footer className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-5 sm:px-8 lg:px-10">
 				<LoginFooter />
-			</div>
+			</footer>
 		</div>
 	);
 }
 
 export default SignIn;
-
-// {/* <div className="relative flex w-full min-h-screen">
-// 				{/* Image */}
-// 				<div className="w-full">
-// 					<img
-// 						src="/urr3.jpeg"
-// 						alt="background"
-// 						className="w-full h-full object-cover"
-// 					/>
-// 				</div> */}
-
-{
-	/* <div className="relative z-10 min-h-screen flex items-center justify-end">
-	<div className="w-full max-w-md bg-white/60 rounded-md px-8 py-9 shadow-xl mr-80">
-		<Login />
-	</div>
-</div>; */
-}

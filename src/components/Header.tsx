@@ -1,95 +1,123 @@
-import { LogOut } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { LogOut, Menu, X } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import ThemeToggle from '../utils/ThemeToggle';
+
+const navigation = [
+	{ label: 'Home', to: '/' },
+	{ label: 'Resources', to: '/resources' },
+	{ label: 'Departments', to: '/department' },
+	{ label: 'Functions', to: '/functions' },
+	{ label: 'Feedback', to: '/feedback' },
+	{ label: 'About', to: '/about' },
+];
 
 function Header() {
 	const navigate = useNavigate();
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+		`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+			isActive
+				? 'bg-red-50 text-[#c8102e] dark:bg-red-950/50 dark:text-red-300'
+				: 'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white'
+		}`;
+
+	const logOut = () => {
+		sessionStorage.removeItem('token');
+		sessionStorage.removeItem('display_name');
+		sessionStorage.removeItem('welcome_modal_dismissed');
+		navigate('/login', { replace: true });
+	};
+
 	return (
-		<div className="header flex justify-around items-center bg-white dark:bg-slate-900 text-black dark:text-slate-100 p-4 border-b border-transparent dark:border-slate-800">
-			<div className="hover:text-[#d70900] dark:hover:text-[#e8495f]">
-				UBA Resource Repository
-			</div>
-
-			<nav className="flex space-x-6">
-				<NavLink
+		<div className="border-b border-slate-200/80 bg-white/95 text-slate-900 shadow-sm shadow-slate-900/3 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/95 dark:text-slate-100">
+			<div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+				<Link
 					to="/"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
+					className="group flex min-w-0 items-center gap-3 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
+					aria-label="UBA Digital Resource Repository home"
 				>
-					Home
-				</NavLink>
+					<span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-50 ring-1 ring-red-100 dark:bg-red-950/50 dark:ring-red-900">
+						<img src="/seed.png" alt="" width={28} height={28} />
+					</span>
+					<span className="hidden min-w-0 sm:block">
+						<span className="block truncate text-sm font-bold tracking-tight text-slate-900 dark:text-white">
+							UBA Resource Hub
+						</span>
+						<span className="block truncate text-[11px] font-medium text-slate-500 dark:text-slate-400">
+							Digital resources, all in one place
+						</span>
+					</span>
+				</Link>
 
-				<NavLink
-					to="/resources"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
+				<nav
+					aria-label="Main navigation"
+					className="hidden items-center gap-1 md:flex"
 				>
-					Resource
-				</NavLink>
-				<NavLink
-					to="/department"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
-				>
-					Department
-				</NavLink>
-				<NavLink
-					to="/functions"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
-				>
-					Function
-				</NavLink>
-				<NavLink
-					to="/feedback"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
-				>
-					Feedback
-				</NavLink>
-				{/* <NavLink
-					to="/resource-types"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black'}`
-					}
-				>
-					Resource Type
-				</NavLink> */}
-				<NavLink
-					to="/about"
-					className={({ isActive }) =>
-						`hover:text-[#c8102e] dark:hover:text-[#e8495f] transition-colors ${isActive ? 'text-[#c8102e] font-bold' : 'text-black dark:text-slate-200'}`
-					}
-				>
-					About
-				</NavLink>
-			</nav>
+					{navigation.map(({ label, to }) => (
+						<NavLink key={to} to={to} end={to === '/'} className={navLinkClass}>
+							{label}
+						</NavLink>
+					))}
+				</nav>
 
-			<div className="flex relative items-center">
-				<img src="/seed.png" alt="UBA Logo" width={40} height={40} />
-				<LogOut
-					size={20}
-					className="absolute -right-20 cursor-pointer text-black dark:text-slate-200"
-					onClick={() => {
-						const token = sessionStorage.getItem('token');
-						if (token) {
-							sessionStorage.removeItem('token');
-							sessionStorage.removeItem('display_name');
-							sessionStorage.removeItem('welcome_modal_dismissed');
-							// alert('Logout Successful');
-							navigate('/login', { replace: true });
-						}
-					}}
-				/>
-
-				<ThemeToggle />
+				<div className="flex shrink-0 items-center gap-1">
+					<ThemeToggle />
+					<button
+						type="button"
+						onClick={logOut}
+						aria-label="Sign out"
+						title="Sign out"
+						className="hidden h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#c8102e] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-300 sm:inline-flex"
+					>
+						<LogOut size={17} aria-hidden="true" />
+						<span className="hidden lg:inline">Sign out</span>
+					</button>
+					<button
+						type="button"
+						onClick={() => setMenuOpen((open) => !open)}
+						aria-expanded={menuOpen}
+						aria-controls="mobile-navigation"
+						aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+						className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+					>
+						{menuOpen ? <X size={20} /> : <Menu size={20} />}
+					</button>
+				</div>
 			</div>
+
+			{menuOpen && (
+				<nav
+					id="mobile-navigation"
+					aria-label="Mobile navigation"
+					className="border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950 md:hidden"
+				>
+					<div className="mx-auto flex max-w-7xl flex-col gap-1">
+						{navigation.map(({ label, to }) => (
+							<NavLink
+								key={to}
+								to={to}
+								end={to === '/'}
+								onClick={() => setMenuOpen(false)}
+								className={navLinkClass}
+							>
+								{label}
+							</NavLink>
+						))}
+						<button
+							type="button"
+							onClick={logOut}
+							className="mt-1 inline-flex items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-[#c8102e] dark:text-slate-300 dark:hover:bg-slate-800"
+						>
+							<LogOut size={16} aria-hidden="true" />
+							Sign out
+						</button>
+					</div>
+				</nav>
+			)}
 		</div>
 	);
 }
+
 export default Header;

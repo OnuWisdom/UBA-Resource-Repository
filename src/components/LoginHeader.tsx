@@ -1,19 +1,26 @@
+import { Link } from 'react-router-dom';
+
 function LoginHeader() {
 	return (
-		<div className="flex items-center justify-between px-48 w-full gap-3">
-			<div className="flex flex-col leading-none text-white">
-				<span className="text-sm font-extrabold tracking-[-0.04em]">UBA</span>
-
-				<span className="mt-1 text-xs font-semibold uppercase tracking-[0.18em]">
-					Resource
+		<div className="flex items-center justify-between">
+			<Link
+				to="/login"
+				className="flex items-center gap-3 rounded-lg text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+				aria-label="UBA Resource Repository"
+			>
+				<img src="/seed.png" alt="" width={42} height={42} />
+				<span className="leading-tight">
+					<span className="block text-sm font-bold tracking-wide">UBA</span>
+					<span className="block text-xs font-medium text-white/75">
+						Resource Repository
+					</span>
 				</span>
-
-				<span className="text-xs font-semibold uppercase tracking-[0.18em]">
-					Repository
-				</span>
-			</div>
-			<img src="/seed.png" alt="UBA Logo" width={40} height={40} />
+			</Link>
+			<span className="hidden rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/85 sm:inline-flex">
+				For UBA employees
+			</span>
 		</div>
 	);
 }
+
 export default LoginHeader;

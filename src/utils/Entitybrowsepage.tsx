@@ -66,32 +66,41 @@ function EntityBrowsePage({
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
 			<div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-				<div className="mx-auto max-w-7xl px-5 py-7 sm:px-8 lg:px-10">
-					<div className="mb-5 text-sm text-slate-500 dark:text-slate-400">
-						<Link to="/" className="transition hover:text-[#c8102e]">
+				<div className="mx-auto max-w-7xl px-4 py-5 sm:px-8 sm:py-7 lg:px-10">
+					<nav
+						aria-label="Breadcrumb"
+						className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500 dark:text-slate-400 sm:mb-5"
+					>
+						<Link
+							to="/"
+							className="rounded-sm transition hover:text-[#c8102e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
+						>
 							Home
 						</Link>
-						<span className="mx-2 text-slate-300 dark:text-slate-600">/</span>
-						<span className="font-medium text-slate-700 dark:text-slate-200">
+						<span aria-hidden="true" className="text-slate-300 dark:text-slate-600">/</span>
+						<span
+							aria-current="page"
+							className="max-w-full break-words font-medium text-slate-700 dark:text-slate-200"
+						>
 							{breadcrumbLabel}
 						</span>
-					</div>
+					</nav>
 					<p className="text-xs font-bold uppercase tracking-[0.16em] text-[#c8102e]">
 						Explore the directory
 					</p>
-					<h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+					<h1 className="mt-2 break-words text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
 						{pageTitle}
 					</h1>
-					<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 sm:text-base">
+					<p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
 						{pageSubtitle}
 					</p>
 				</div>
 			</div>
 
-			<div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10">
+			<div className="mx-auto max-w-7xl px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
 				{loading && (
 					<div
-						className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
+						className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
 						role="status"
 						aria-label={`Loading ${breadcrumbLabel.toLowerCase()}`}
 					>
@@ -109,14 +118,14 @@ function EntityBrowsePage({
 				)}
 
 				{error && (
-					<div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
+					<div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
 						<CircleAlert size={16} />
 						{error}
 					</div>
 				)}
 
 				{!loading && !error && items.length === 0 && (
-					<div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-slate-700 dark:bg-slate-900">
+					<div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center dark:border-slate-700 dark:bg-slate-900 sm:p-10">
 						<p className="font-medium text-slate-800 dark:text-slate-100">
 							Nothing to show just yet
 						</p>
@@ -127,7 +136,7 @@ function EntityBrowsePage({
 				)}
 
 				{!loading && !error && items.length > 0 && (
-					<div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
 						{items.map((item) => (
 							<EntityCard
 								key={item.id}

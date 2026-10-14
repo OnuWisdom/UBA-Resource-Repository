@@ -81,7 +81,7 @@ function WelcomeModal() {
 					<X size={19} />
 				</button>
 
-				<div className="p-6 sm:p-8">
+				<div className="p-4 sm:p-8">
 					<p className="text-sm font-semibold text-[#c8102e]">
 						Your UBA resource hub
 					</p>
@@ -99,7 +99,7 @@ function WelcomeModal() {
 						easier.
 					</p>
 
-					<div className="mt-7">
+					<div className="mt-5 sm:mt-7">
 						<h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
 							How are you feeling today?
 						</h2>
@@ -123,7 +123,7 @@ function WelcomeModal() {
 						</div>
 					</div>
 
-					<div className="mt-7">
+					<div className="mt-5 sm:mt-7">
 						<h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
 							What resource will you be browsing today?
 						</h2>
@@ -155,7 +155,7 @@ function WelcomeModal() {
 						</form>
 					</div>
 
-					<div className="mt-6 flex flex-col-reverse items-center justify-between gap-3 border-t border-slate-200 pt-5 dark:border-slate-700 sm:flex-row">
+					<div className="mt-5 flex flex-col-reverse items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-700 sm:mt-6 sm:flex-row sm:pt-5">
 						<button
 							type="button"
 							onClick={closeModal}

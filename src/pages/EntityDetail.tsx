@@ -119,36 +119,45 @@ function EntityDetail() {
 
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-			<div className="max-w-6xl mx-auto px-6 py-6">
-				<div className="text-sm text-slate-500 dark:text-slate-400 mb-3">
-					<Link to="/" className="hover:text-[#c8102e]">
+			<div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+				<nav
+					aria-label="Breadcrumb"
+					className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+				>
+					<Link
+						to="/"
+						className="rounded-sm hover:text-[#c8102e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
+					>
 						Home
 					</Link>
-					<span className="mx-2">›</span>
-					<Link to={parentPath} className="hover:text-[#c8102e]">
+					<span aria-hidden="true">›</span>
+					<Link
+						to={parentPath}
+						className="rounded-sm hover:text-[#c8102e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
+					>
 						{parentLabel}
 					</Link>
-					<span className="mx-2">›</span>
+					<span aria-hidden="true">›</span>
 					<span
-						className="font-medium text-slate-700 dark:text-slate-300"
+						className="max-w-full break-words font-medium text-slate-700 dark:text-slate-300"
 						aria-current="page"
 					>
 						{entityName}
 					</span>
-				</div>
+				</nav>
 
-				<h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+				<h1 className="break-words text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-4xl lg:text-5xl">
 					{entityName}
 				</h1>
-				<p className="mt-2 text-lg text-slate-500 dark:text-slate-400">
+				<p className="mt-2 text-base leading-6 text-slate-500 dark:text-slate-400 sm:text-lg">
 					{entityDescription}
 				</p>
 
-				<div className="mt-6 flex items-center gap-2 text-slate-600">
+				<div className="mt-5 flex items-start gap-2 text-slate-600 dark:text-slate-300 sm:mt-6 sm:items-center">
 					<div className="bg-red-50 p-2 rounded-md">
 						<FileText className="text-[#c8102e]" size={18} />
 					</div>
-					<p className="text-base font-medium">
+					<p className="text-sm font-medium sm:text-base">
 						{loading
 							? `Resources in this ${entityTypeLabel}`
 							: `${entityResources.length} resource${entityResources.length === 1 ? '' : 's'} in this ${entityTypeLabel}`}
@@ -156,7 +165,7 @@ function EntityDetail() {
 				</div>
 			</div>
 
-			<div className="max-w-6xl mx-auto px-6 pb-12">
+			<div className="mx-auto max-w-6xl px-4 pb-8 sm:px-6 sm:pb-12">
 				{loading ? (
 					<div
 						className="flex min-h-48 items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400"
@@ -167,34 +176,34 @@ function EntityDetail() {
 						Loading resources...
 					</div>
 				) : error ? (
-					<div className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 p-3 rounded-md text-sm">
+					<div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
 						<CircleAlert size={18} />
 						{error}
 					</div>
 				) : currentEntity ? (
 					<>
-						<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
 							{entityResources.map((resource) => (
 						<div
 							key={resource.id}
-							className="bg-white border border-slate-200 rounded-xl shadow-sm p-5 flex flex-col h-full hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+							className="flex h-full min-w-0 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 sm:p-5"
 						>
 							<div className="flex items-start gap-3 mb-3">
-								<div className="bg-red-50 p-2.5 rounded-md">
+								<div className="shrink-0 rounded-md bg-red-50 p-2.5 dark:bg-red-950/50">
 									<FileText className="text-[#c8102e]" size={18} />
 								</div>
-								<div>
-									<h2 className="text-2xl font-semibold text-slate-900 leading-tight">
+								<div className="min-w-0">
+									<h2 className="break-words text-xl font-semibold leading-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
 										{resource.name}
 									</h2>
 									{resource.resource_types?.[0] && (
-										<p className="text-sm text-slate-400 mt-1">{resource.resource_types[0].name}</p>
+										<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{resource.resource_types[0].name}</p>
 									)}
 								</div>
 							</div>
 
 							{resource.description && (
-								<p className="text-sm text-slate-600 leading-relaxed mb-4">
+								<p className="mb-4 break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300">
 									{resource.description}
 								</p>
 							)}
@@ -203,7 +212,7 @@ function EntityDetail() {
 								{resource.departments?.map((dept) => (
 									<span
 										key={dept.id}
-										className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-[#c8102e]"
+										className="inline-flex max-w-full items-center break-words rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-[#c8102e] dark:bg-red-950/50"
 									>
 										{dept.name}
 									</span>
@@ -211,15 +220,15 @@ function EntityDetail() {
 								{resource.functions?.map((func) => (
 									<span
 										key={func.id}
-										className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"
+										className="inline-flex max-w-full items-center break-words rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"
 									>
 										{func.name}
 									</span>
 								))}
 							</div>
 
-							<div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-								<p className="text-sm text-slate-500">
+							<div className="mt-auto flex flex-col gap-3 border-t border-slate-100 pt-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between">
+								<p className="text-sm text-slate-500 dark:text-slate-400">
 									{resource.is_active ? 'Active resource' : 'Inactive resource'}
 								</p>
 								{resource.url ? (
@@ -227,14 +236,14 @@ function EntityDetail() {
 										href={resource.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+										className="inline-flex min-h-11 items-center gap-1 self-start text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] sm:min-h-0"
 									>
 										View Details
 										<ArrowRight size={14} />
 									</a>
 								) : (
 									<div className="flex flex-col items-end gap-1">
-										<span className="text-xs text-slate-400">
+										<span className="text-xs text-slate-500 dark:text-slate-400">
 											Resource link not listed
 										</span>
 										{resource.departments?.[0] && (
@@ -243,7 +252,7 @@ function EntityDetail() {
 												onClick={() =>
 													navigate(`/department/${resource.departments[0].slug}`)
 												}
-												className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+												className="inline-flex min-h-11 items-center gap-1 text-left text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] sm:min-h-0"
 											>
 												Browse {resource.departments[0].name}
 												<ArrowRight size={14} />
@@ -257,15 +266,15 @@ function EntityDetail() {
 						</div>
 
 						{entityResources.length === 0 && (
-							<div className="mt-8 rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
+							<div className="mt-8 rounded-lg border border-dashed border-slate-300 bg-white p-5 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 sm:p-8">
 								<FileQuestion size={22} className="mx-auto mb-2 text-slate-400" />
-								<h2 className="font-semibold text-slate-800">
+								<h2 className="font-semibold text-slate-800 dark:text-slate-100">
 									No resources available for this {entityTypeLabel} yet
 								</h2>
 								<p className="mt-2 text-sm">
 									Try another category or browse all available resources.
 								</p>
-								<div className="mt-4 flex flex-wrap justify-center gap-4">
+								<div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
 									<button
 										type="button"
 										onClick={() =>
@@ -277,7 +286,7 @@ function EntityDetail() {
 														: '/resources',
 											)
 										}
-										className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+										className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] sm:min-h-0"
 									>
 										<ArrowLeft size={14} />
 										Browse {parentLabel.toLowerCase()}
@@ -285,7 +294,7 @@ function EntityDetail() {
 									<button
 										type="button"
 										onClick={() => navigate('/search')}
-										className="inline-flex items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline"
+										className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] sm:min-h-0"
 									>
 										<Building2 size={15} />
 										Search all resources
@@ -295,7 +304,7 @@ function EntityDetail() {
 						)}
 					</>
 				) : (
-					<div className="flex items-center gap-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 p-3 rounded-md text-sm">
+					<div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
 						<CircleAlert size={18} />
 						Unable to load entity details.
 					</div>

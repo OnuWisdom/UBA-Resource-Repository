@@ -41,11 +41,11 @@ function Header() {
 					<span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-red-50 ring-1 ring-red-100 dark:bg-red-950/50 dark:ring-red-900">
 						<img src="/seed.png" alt="" width={28} height={28} />
 					</span>
-					<span className="hidden min-w-0 sm:block">
-						<span className="block truncate text-sm font-bold tracking-tight text-slate-900 dark:text-white">
+					<span className="block min-w-0">
+						<span className="block truncate text-xs font-bold tracking-tight text-slate-900 dark:text-white sm:text-sm">
 							UBA Resource Hub
 						</span>
-						<span className="block truncate text-[11px] font-medium text-slate-500 dark:text-slate-400">
+						<span className="hidden truncate text-[11px] font-medium text-slate-500 dark:text-slate-400 sm:block">
 							Digital resources, all in one place
 						</span>
 					</span>
@@ -53,7 +53,7 @@ function Header() {
 
 				<nav
 					aria-label="Main navigation"
-					className="hidden items-center gap-1 md:flex"
+					className="hidden items-center gap-1 lg:flex"
 				>
 					{navigation.map(({ label, to }) => (
 						<NavLink key={to} to={to} end={to === '/'} className={navLinkClass}>
@@ -69,7 +69,7 @@ function Header() {
 						onClick={logOut}
 						aria-label="Sign out"
 						title="Sign out"
-						className="hidden h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#c8102e] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-300 sm:inline-flex"
+						className="hidden h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#c8102e] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-red-300 lg:inline-flex"
 					>
 						<LogOut size={17} aria-hidden="true" />
 						<span className="hidden lg:inline">Sign out</span>
@@ -80,7 +80,7 @@ function Header() {
 						aria-expanded={menuOpen}
 						aria-controls="mobile-navigation"
 						aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-						className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-200 dark:hover:bg-slate-800 md:hidden"
+						className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:text-slate-200 dark:hover:bg-slate-800 lg:hidden"
 					>
 						{menuOpen ? <X size={20} /> : <Menu size={20} />}
 					</button>
@@ -91,7 +91,7 @@ function Header() {
 				<nav
 					id="mobile-navigation"
 					aria-label="Mobile navigation"
-					className="border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950 md:hidden"
+					className="border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950 lg:hidden"
 				>
 					<div className="mx-auto flex max-w-7xl flex-col gap-1">
 						{navigation.map(({ label, to }) => (

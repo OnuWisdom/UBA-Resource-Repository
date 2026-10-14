@@ -84,13 +84,13 @@ function Hero() {
 				aria-hidden="true"
 			/>
 
-			<div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-16 lg:px-10 lg:py-20">
-				<div className="max-w-3xl">
+			<div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-16 lg:px-10 lg:py-20">
+				<div className="w-full min-w-0 max-w-3xl">
 					<div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1.5 text-xs font-semibold tracking-wide text-white/90">
 						<Sparkles size={14} aria-hidden="true" />
 						UBA DIGITAL RESOURCE HUB
 					</div>
-					<h1 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.65rem]">
+					<h1 className="w-full max-w-3xl break-words text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.65rem]">
 						Find what you need.
 						<span className="mt-1 block text-white/70">Get on with your day.</span>
 					</h1>
@@ -143,7 +143,7 @@ function Hero() {
 				</div>
 
 				<div
-					className="hidden lg:block"
+					className="mx-auto block w-full max-w-[17rem] lg:mx-0"
 					role="region"
 					aria-roledescription="carousel"
 					aria-label="Resource hub highlights"
@@ -152,7 +152,7 @@ function Hero() {
 						<div className="absolute inset-0 rotate-6 rounded-[2.5rem] border border-white/10 bg-white/[0.04]" />
 						<div className="absolute inset-4 -rotate-3 rounded-[2rem] border border-white/10 bg-white/[0.06]" />
 						<div
-							className="absolute inset-8 flex gap-1.5 flex-col justify-between rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-6 shadow-2xl backdrop-blur-sm"
+							className="absolute inset-6 flex flex-col justify-between gap-1.5 rounded-[1.5rem] border border-white/15 bg-white/[0.09] p-4 shadow-2xl backdrop-blur-sm sm:inset-8 sm:p-6"
 							role="group"
 							aria-roledescription="slide"
 							aria-label={`${activeHighlight + 1} of ${heroHighlights.length}: ${heroHighlights[activeHighlight].eyebrow}`}

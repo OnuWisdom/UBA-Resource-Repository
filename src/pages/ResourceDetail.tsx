@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import {
 	ArrowLeft,
 	ArrowRight,
@@ -26,7 +26,6 @@ type LoadedResource = {
 function ResourceDetail() {
 	const { slug } = useParams();
 	const location = useLocation();
-	const navigate = useNavigate();
 	const routeResource = (location.state as ResourceRouteState | null)?.resource;
 	const [loadedResource, setLoadedResource] = useState<LoadedResource | null>(null);
 
@@ -72,52 +71,61 @@ function ResourceDetail() {
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
 			<div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-				<div className="mx-auto max-w-6xl px-6 py-6">
-					<div className="mb-3 text-sm text-slate-500 dark:text-slate-400">
-						<Link to="/" className="hover:text-[#c8102e]">
+				<div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
+					<nav
+						aria-label="Breadcrumb"
+						className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+					>
+						<Link
+							to="/"
+							className="rounded-sm hover:text-[#c8102e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
+						>
 							Home
 						</Link>
-						<span className="mx-2">›</span>
+						<span aria-hidden="true">›</span>
 						<Link
 							to="/#frequently-used-resources"
-							className="hover:text-[#c8102e]"
+							className="rounded-sm hover:text-[#c8102e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
 						>
 							Frequently Used Resources
 						</Link>
-						<span className="mx-2">›</span>
-						<span className="font-medium text-slate-700 dark:text-slate-300">
+						<span aria-hidden="true">›</span>
+						<span
+							aria-current="page"
+							className="max-w-full break-words font-medium text-slate-700 dark:text-slate-300"
+						>
 							{resource?.name ?? 'Resource details'}
 						</span>
-					</div>
-					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+					</nav>
+					<h1 className="break-words text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
 						{resource?.name ?? 'Resource details'}
 					</h1>
 					{resource && (
-						<p className="mt-1 text-slate-500 dark:text-slate-400">
+						<p className="mt-1 break-words text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
 							{resource.description}
 						</p>
 					)}
 				</div>
 			</div>
 
-			<main className="mx-auto max-w-6xl px-6 py-8">
+			<main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
 				<Link
 					to="/#frequently-used-resources"
-					className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#c8102e] hover:underline"
+					className="mb-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
 				>
 					<ArrowLeft size={16} />
 					Back to frequently used resources
 				</Link>
 
 				{loading && (
-					<div className="flex min-h-40 items-center justify-center gap-2 text-sm text-slate-500" role="status">
+					<div className="flex min-h-40 items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400" role="status">
 						<LoaderCircle size={18} className="animate-spin text-[#c8102e]" />
 						Loading resource details...
 					</div>
 				)}
 
 				{error && (
-					<div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
+					<div className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-center dark:border-slate-700 dark:bg-slate-900 sm:p-8">
 						<CircleAlert size={24} className="mx-auto mb-3 text-[#c8102e]" />
 						<h2 className="font-semibold text-slate-900 dark:text-slate-100">
 							Resource details aren’t available
@@ -125,16 +133,16 @@ function ResourceDetail() {
 						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
 							{error} Try browsing resources or searching by name.
 						</p>
-						<div className="mt-4 flex justify-center gap-4">
+						<div className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2">
 							<Link
 								to="/resources"
-								className="text-sm font-medium text-[#c8102e] hover:underline"
+								className="inline-flex min-h-11 items-center text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
 							>
 								Browse resource types
 							</Link>
 							<Link
 								to="/search"
-								className="text-sm font-medium text-[#c8102e] hover:underline"
+								className="inline-flex min-h-11 items-center text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
 							>
 								Search resources
 							</Link>
@@ -143,23 +151,23 @@ function ResourceDetail() {
 				)}
 
 				{resource && (
-					<div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
-						<section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+					<div className="grid min-w-0 gap-4 sm:gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
+						<section className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
 							<div className="mb-5 flex items-center gap-3">
-								<div className="rounded-md bg-red-50 p-2.5 text-[#c8102e] dark:bg-red-950/50">
+								<div className="shrink-0 rounded-md bg-red-50 p-2.5 text-[#c8102e] dark:bg-red-950/50">
 									<FileText size={20} />
 								</div>
-								<div>
+								<div className="min-w-0">
 									<h2 className="font-semibold text-slate-900 dark:text-slate-100">
 										About this resource
 									</h2>
-									<p className="text-sm text-slate-500 dark:text-slate-400">
+									<p className="break-words text-sm text-slate-500 dark:text-slate-400">
 										{resource.resource_types?.map((type) => type.name).join(', ') ||
 											'Resource'}
 									</p>
 								</div>
 							</div>
-							<p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+							<p className="break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300">
 								{resource.description || 'No description has been added yet.'}
 							</p>
 							<div className="mt-6 border-t border-slate-200 pt-4 dark:border-slate-700">
@@ -172,7 +180,7 @@ function ResourceDetail() {
 							</div>
 						</section>
 
-						<aside className="space-y-5 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+						<aside className="min-w-0 space-y-5 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
 							<div>
 								<h2 className="mb-3 flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
 									<Building2 size={17} className="text-[#c8102e]" />
@@ -181,20 +189,17 @@ function ResourceDetail() {
 								{resource.departments?.length ? (
 									<div className="flex flex-wrap gap-2">
 										{resource.departments.map((department) => (
-											<button
+											<Link
 												key={department.id}
-												type="button"
-												onClick={() =>
-													navigate(`/department/${department.slug}`)
-												}
-												className="rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-[#c8102e] hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-950"
+												to={`/department/${department.slug}`}
+												className="inline-flex min-h-11 max-w-full items-center break-words rounded-full bg-red-50 px-3 py-2 text-xs font-medium text-[#c8102e] hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:bg-red-950/50 dark:hover:bg-red-950 sm:min-h-0 sm:px-2.5 sm:py-1"
 											>
 												{department.name}
-											</button>
+											</Link>
 										))}
 									</div>
 								) : (
-									<p className="text-sm text-slate-500">No department listed.</p>
+									<p className="text-sm text-slate-500 dark:text-slate-400">No department listed.</p>
 								)}
 							</div>
 
@@ -205,18 +210,17 @@ function ResourceDetail() {
 								{resource.functions?.length ? (
 									<div className="flex flex-wrap gap-2">
 										{resource.functions.map((func) => (
-											<button
+											<Link
 												key={func.id}
-												type="button"
-												onClick={() => navigate(`/functions/${func.slug}`)}
-												className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+												to={`/functions/${func.slug}`}
+												className="inline-flex min-h-11 max-w-full items-center break-words rounded-full bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 sm:min-h-0 sm:px-2.5 sm:py-1"
 											>
 												{func.name}
-											</button>
+											</Link>
 										))}
 									</div>
 								) : (
-									<p className="text-sm text-slate-500">No function listed.</p>
+									<p className="text-sm text-slate-500 dark:text-slate-400">No function listed.</p>
 								)}
 							</div>
 
@@ -226,7 +230,7 @@ function ResourceDetail() {
 										href={resource.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="inline-flex items-center gap-2 rounded-md bg-[#c8102e] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#a80d26]"
+										className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[#c8102e] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#a80d26] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
 									>
 										Open resource <ArrowRight size={15} />
 									</a>
@@ -237,7 +241,7 @@ function ResourceDetail() {
 										</p>
 										<Link
 											to="/feedback"
-											className="mt-2 inline-block text-sm font-medium text-[#c8102e] hover:underline"
+											className="mt-2 inline-flex min-h-11 items-center text-sm font-medium text-[#c8102e] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]"
 										>
 											Report a missing or outdated link
 										</Link>

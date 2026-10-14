@@ -198,10 +198,10 @@ function ResourceChatbot() {
 	};
 
 	return (
-		<div className="fixed bottom-5 right-5 z-50">
+		<div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50">
 			{isOpen && (
 				<section
-					className="mb-3 flex h-[min(70vh,36rem)] w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+					className="mb-3 flex h-[min(70dvh,36rem)] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900"
 					aria-label="Resource assistant"
 				>
 					<div className="flex items-center justify-between bg-[#c8102e] px-4 py-3 text-white">

@@ -348,7 +348,7 @@ function Feedback() {
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-slate-950">
 			<div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-				<div className="mx-auto max-w-6xl px-6 py-6">
+				<div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
 					<div className="mb-3 text-sm text-slate-500 dark:text-slate-400">
 						<Link to="/" className="hover:text-[#c8102e]">
 							Home
@@ -358,7 +358,7 @@ function Feedback() {
 							Feedback &amp; resource requests
 						</span>
 					</div>
-					<h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+					<h1 className="text-2xl font-bold leading-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
 						Feedback &amp; resource requests
 					</h1>
 					<p className="mt-1 text-slate-500 dark:text-slate-400">
@@ -367,7 +367,7 @@ function Feedback() {
 				</div>
 			</div>
 
-			<main className="mx-auto max-w-6xl px-6 py-8">
+			<main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
 				<div className="mb-6 flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
 					<MessageSquareWarning size={18} className="mt-0.5 shrink-0" />
 					<p>Help Other Employees get updated resources.</p>
@@ -420,7 +420,7 @@ function Feedback() {
 					</>
 				) : submitted ? (
 					<section
-						className="mx-auto max-w-2xl rounded-lg border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900"
+						className="mx-auto max-w-2xl rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6"
 						aria-live="polite"
 					>
 						<BadgeCheck size={36} className="mx-auto mb-3 text-[#c8102e]" />

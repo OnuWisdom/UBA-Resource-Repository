@@ -136,6 +136,46 @@ export async function getResourcesService(): Promise<ResourceSearchResult[]> {
 	return parseResourceList(await response.json());
 }
 
+export async function getRecentlyViewedResourcesService(): Promise<
+	ResourceSearchResult[]
+> {
+	const token = sessionStorage.getItem('token');
+	if (!token) {
+		throw new Error(
+			'Your session has expired. Please sign in again to view recently viewed resources.',
+		);
+	}
+
+	const response = await fetch(`${BASE_URL}/api/resources/recently-viewed/`, {
+		headers: {
+			Authorization: `Token ${token}`,
+		},
+	});
+
+	if (!response.ok) {
+		if (response.status === 401) {
+			throw new Error(
+				'Your session has expired or could not be verified. Please sign in again.',
+			);
+		}
+		if (response.status === 403) {
+			throw new Error('You do not have permission to view recent resources.');
+		}
+		throw new Error(
+			`Unable to load recently viewed resources (HTTP ${response.status}).`,
+		);
+	}
+
+	const data: unknown = await response.json();
+	if (!Array.isArray(data)) {
+		throw new Error(
+			'The recently viewed resources service returned an unsupported response.',
+		);
+	}
+
+	return data as ResourceSearchResult[];
+}
+
 export async function createResourceSubmissionService(
 	payload: ResourceSubmissionPayload,
 ): Promise<number | null> {

@@ -9,6 +9,7 @@ import {
 	Building2,
 	ArrowLeft,
 } from 'lucide-react';
+import FavoriteButton from '../components/FavoriteButton';
 import {
 	getDepartmentBySlugService,
 	getFunctionBySlugService,
@@ -188,17 +189,24 @@ function EntityDetail() {
 							key={resource.id}
 							className="flex h-full min-w-0 flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 sm:p-5"
 						>
-							<div className="flex items-start gap-3 mb-3">
+							<div className="mb-3 flex items-start gap-3">
 								<div className="shrink-0 rounded-md bg-red-50 p-2.5 dark:bg-red-950/50">
 									<FileText className="text-[#c8102e]" size={18} />
 								</div>
-								<div className="min-w-0">
-									<h2 className="break-words text-xl font-semibold leading-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
-										{resource.name}
-									</h2>
-									{resource.resource_types?.[0] && (
-										<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{resource.resource_types[0].name}</p>
-									)}
+								<div className="min-w-0 flex-1">
+									<div className="flex items-start justify-between gap-2">
+										<div className="min-w-0">
+											<h2 className="break-words text-xl font-semibold leading-tight text-slate-900 dark:text-slate-100 sm:text-2xl">
+												{resource.name}
+											</h2>
+											{resource.resource_types?.[0] && (
+												<p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+													{resource.resource_types[0].name}
+												</p>
+											)}
+										</div>
+										<FavoriteButton resource={resource} />
+									</div>
 								</div>
 							</div>
 

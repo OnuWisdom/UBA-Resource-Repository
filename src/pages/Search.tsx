@@ -78,6 +78,7 @@ import {
 } from 'lucide-react';
 import { searchResourceService } from '../services/queryServices';
 import { Link } from 'react-router-dom';
+import FavoriteButton from '../components/FavoriteButton';
 
 type ResourceRef = {
 	id: number;
@@ -95,8 +96,8 @@ type SearchType = {
 	functions: ResourceRef[];
 	resource_types: ResourceRef[];
 	is_active: boolean;
-	created_at: string;
-	updated_at: string;
+	created_at?: string;
+	updated_at?: string;
 };
 
 const suggestedSearches = ['leave', 'expense', 'password', 'training'];
@@ -329,15 +330,20 @@ function Search() {
 									<div className="rounded-xl bg-red-50 p-2.5 text-[#c8102e] dark:bg-red-950/50 dark:text-red-300">
 										<FileText className="text-[#c8102e]" size={18} />
 									</div>
-									<div>
-										<h3 className="text-base font-semibold leading-tight text-slate-900 dark:text-slate-100">
+									<div className="min-w-0 flex-1">
+										<div className="flex items-start justify-between gap-2">
+											<div className="min-w-0">
+												<h3 className="text-base font-semibold leading-tight text-slate-900 dark:text-slate-100">
 											{resource.name}
-										</h3>
-										{resource.resource_types?.[0] && (
-											<p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-												{resource.resource_types[0].name}
-											</p>
-										)}
+												</h3>
+												{resource.resource_types?.[0] && (
+													<p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+														{resource.resource_types[0].name}
+													</p>
+												)}
+											</div>
+											<FavoriteButton resource={resource} />
+										</div>
 									</div>
 								</div>
 

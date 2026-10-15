@@ -6,6 +6,7 @@ import ThemeToggle from '../utils/ThemeToggle';
 const navigation = [
 	{ label: 'Home', to: '/' },
 	{ label: 'Resources', to: '/resources' },
+	{ label: 'Favorites', to: '/favorites' },
 	{ label: 'Departments', to: '/department' },
 	{ label: 'Functions', to: '/functions' },
 	{ label: 'Feedback', to: '/feedback' },

@@ -12,6 +12,7 @@ import {
 	searchResourceService,
 	type ResourceSearchResult,
 } from '../services/queryServices';
+import FavoriteButton from './FavoriteButton';
 
 type ChatMessage = {
 	id: number;
@@ -241,7 +242,10 @@ function ResourceChatbot() {
 											key={resource.id}
 											className="mt-3 rounded-md border border-slate-200 bg-white p-3 text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
 										>
-											<h3 className="font-semibold">{resource.name}</h3>
+											<div className="flex items-start justify-between gap-2">
+												<h3 className="min-w-0 font-semibold">{resource.name}</h3>
+												<FavoriteButton resource={resource} />
+											</div>
 											{resource.description && (
 												<p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
 													{resource.description}

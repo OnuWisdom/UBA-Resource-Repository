@@ -1,9 +1,10 @@
 import { ArrowRight, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import type { ResourceSearchResult } from '../services/queryServices';
+import type { FavoriteResource } from '../services/queryServices';
+import FavoriteButton from './FavoriteButton';
 
 interface CardProps {
-	resource: ResourceSearchResult;
+	resource: FavoriteResource;
 }
 
 function Card({ resource }: CardProps) {
@@ -13,17 +14,22 @@ function Card({ resource }: CardProps) {
 
 	return (
 		<article className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#c8102e]/50 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
-			<div className="mb-3 flex items-start gap-3">
+			<div className="mb-3 flex items-start justify-between gap-3">
 				<div className="rounded-md bg-red-50 p-2 text-[#c8102e] dark:bg-red-950/50">
 					<FileText size={19} />
 				</div>
-				<div className="min-w-0">
-					<h2 className="text-lg font-semibold leading-tight text-gray-900 dark:text-slate-100">
-						{resource.name}
-					</h2>
-					<p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">
-						{resourceType}
-					</p>
+				<div className="min-w-0 flex-1">
+					<div className="flex items-start justify-between gap-2">
+						<div className="min-w-0">
+							<h2 className="text-lg font-semibold leading-tight text-gray-900 dark:text-slate-100">
+								{resource.name}
+							</h2>
+							<p className="mt-0.5 text-sm text-gray-500 dark:text-slate-400">
+								{resourceType}
+							</p>
+						</div>
+						<FavoriteButton resource={resource} />
+					</div>
 				</div>
 			</div>
 

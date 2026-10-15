@@ -8,6 +8,7 @@ import {
 	FileText,
 	LoaderCircle,
 } from 'lucide-react';
+import FavoriteButton from '../components/FavoriteButton';
 import {
 	getResourcesService,
 	type ResourceSearchResult,
@@ -97,9 +98,12 @@ function ResourceDetail() {
 							{resource?.name ?? 'Resource details'}
 						</span>
 					</nav>
-					<h1 className="break-words text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
-						{resource?.name ?? 'Resource details'}
-					</h1>
+					<div className="flex items-start justify-between gap-3">
+						<h1 className="min-w-0 break-words text-2xl font-bold text-slate-900 dark:text-slate-100 sm:text-3xl">
+							{resource?.name ?? 'Resource details'}
+						</h1>
+						{resource && <FavoriteButton resource={resource} />}
+					</div>
 					{resource && (
 						<p className="mt-1 break-words text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
 							{resource.description}

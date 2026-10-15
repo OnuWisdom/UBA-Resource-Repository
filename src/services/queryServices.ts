@@ -6,6 +6,11 @@ export interface ResourceSearchRef {
 	slug: string;
 }
 
+export type FavoriteResource = Omit<
+	ResourceSearchResult,
+	'created_at' | 'updated_at'
+>;
+
 export interface ResourceSearchResult {
 	id: number;
 	name: string;
@@ -174,6 +179,83 @@ export async function getRecentlyViewedResourcesService(): Promise<
 	}
 
 	return data as ResourceSearchResult[];
+}
+
+export async function getFavoritesService(): Promise<ResourceSearchResult[]> {
+	const token = sessionStorage.getItem('token');
+	if (!token) {
+		throw new Error('Your session has expired. Please sign in again.');
+	}
+
+	const response = await fetch(`${BASE_URL}/api/favorites/`, {
+		headers: {
+			Authorization: `Token ${token}`,
+		},
+	});
+
+	if (!response.ok) {
+		if (response.status === 401) {
+			throw new Error(
+				'Your session has expired or could not be verified. Please sign in again.',
+			);
+		}
+		if (response.status === 403) {
+			throw new Error('You do not have permission to view your favorites.');
+		}
+		throw new Error(`Unable to load your favorites (HTTP ${response.status}).`);
+	}
+
+	const data: unknown = await response.json();
+	if (!Array.isArray(data)) {
+		throw new Error('The favorites service returned an unsupported response.');
+	}
+
+	return data as ResourceSearchResult[];
+}
+
+export async function setResourceFavoriteService(
+	slug: string,
+	favorited: boolean,
+): Promise<boolean> {
+	const token = sessionStorage.getItem('token');
+	if (!token) {
+		throw new Error('Your session has expired. Please sign in again.');
+	}
+
+	const response = await fetch(
+		`${BASE_URL}/api/resources/${encodeURIComponent(slug)}/favorite/`,
+		{
+			method: favorited ? 'POST' : 'DELETE',
+			headers: {
+				Authorization: `Token ${token}`,
+			},
+		},
+	);
+
+	if (!response.ok) {
+		if (response.status === 401) {
+			throw new Error(
+				'Your session has expired or could not be verified. Please sign in again.',
+			);
+		}
+		if (response.status === 403) {
+			throw new Error('You do not have permission to update favorites.');
+		}
+		throw new Error(
+			`Unable to ${favorited ? 'add this resource to' : 'remove this resource from'} favorites (HTTP ${response.status}).`,
+		);
+	}
+
+	const data: unknown = await response.json();
+	if (
+		!data ||
+		typeof data !== 'object' ||
+		(data as { favorited?: unknown }).favorited !== favorited
+	) {
+		throw new Error('The favorites service returned an unsupported response.');
+	}
+
+	return favorited;
 }
 
 export async function createResourceSubmissionService(
